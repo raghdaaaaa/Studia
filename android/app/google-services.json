@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "948194733361",
+    "project_id": "studia-3938c",
+    "storage_bucket": "studia-3938c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948194733361:android:fb2965b30214e4c0dad410",
+        "android_client_info": {
+          "package_name": "com.ASRZ.dosmart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjvdSoIXy9lN-NBO2SRKjj3uJCqXsQ9W0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,126 @@
+import 'package:flutter/material.dart';
+import '../../../../Core/Constants/app_color.dart';
+
+enum PickerType { date, time }
+
+class AddTaskPickerField extends StatefulWidget {
+  final String label;
+  final String iconAsset;
+  final PickerType type;
+  final void Function(DateTime)?   onDatePicked;
+  final void Function(TimeOfDay)?  onTimePicked;
+
+  const AddTaskPickerField({
+    super.key,
+    required this.label,
+    required this.iconAsset,
+    required this.type,
+    this.onDatePicked,
+    this.onTimePicked,
+  });
+
+  @override
+  State<AddTaskPickerField> createState() => _AddTaskPickerFieldState();
+}
+
+class _AddTaskPickerFieldState extends State<AddTaskPickerField> {
+  DateTime _date = DateTime.now();
+  TimeOfDay _time = const TimeOfDay(hour: 10, minute: 0);
+
+  Future<void> _pick() async {
+    if (widget.type == PickerType.date) {
+      final picked = await showDatePicker(
+        context: context,
+        initialDate: _date,
+        firstDate: DateTime(2020),
+        lastDate: DateTime(2030),
+        builder: (context, child) => _themedPicker(child!),
+      );
+      if (picked != null) {
+        setState(() => _date = picked);
+        widget.onDatePicked?.call(picked);
+      }
+    } else {
+      final picked = await showTimePicker(
+        context: context,
+        initialTime: _time,
+        builder: (context, child) => _themedPicker(child!),
+      );
+      if (picked != null) {
+        setState(() => _time = picked);
+        widget.onTimePicked?.call(picked);
+      }
+    }
+  }
+
+  Widget _themedPicker(Widget child) {
+    return Theme(
+      data: Theme.of(context).copyWith(
+        colorScheme: const ColorScheme.light(
+          primary: AppColors.primaryColor,
+          onPrimary: AppColors.white,
+          surface: AppColors.white,
+          onSurface: AppColors.primaryColor,
+        ),
+      ),
+      child: child,
+    );
+  }
+
+  String get _displayValue {
+    if (widget.type == PickerType.date) {
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return '${months[_date.month - 1]} ${_date.day}, ${_date.year}';
+    } else {
+      final hour   = _time.hourOfPeriod == 0 ? 12 : _time.hourOfPeriod;
+      final minute = _time.minute.toString().padLeft(2, '0');
+      final period = _time.period == DayPeriod.am ? 'AM' : 'PM';
+      return '$hour:$minute $period';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.label,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
+            fontSize: 17,
+            color: AppColors.primaryColor,
+          ),
+        ),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: _pick,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+            decoration: BoxDecoration(
+              color: AppColors.primaryCard10Color,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  child: Text(
+                    _displayValue,
+                    style: const TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 15,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                ),
+                Image.asset(widget.iconAsset, width: 18, height: 18),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

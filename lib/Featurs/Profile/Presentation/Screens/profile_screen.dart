@@ -1,0 +1,164 @@
+import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:studia/Core/Constants/app_color.dart';
+import 'package:studia/Core/Constants/app_strings.dart';
+import 'package:studia/Core/Constants/assets.dart';
+import 'package:studia/Core/Routing/routes.dart';
+import 'package:studia/Core/Widgets/app_scaffold.dart';
+import 'package:studia/Featurs/Auth/Presentation/Providers/auth_provider.dart';
+import 'package:studia/Featurs/Profile/Presentation/Screens/edit_profile_screen.dart';
+import 'package:studia/Featurs/Profile/Presentation/Screens/security_privacy_screen.dart';
+import '../Widgets/profile_menu_item.dart';
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final authUser = FirebaseAuth.instance.currentUser ??
+        context.watch<AuthProvider>().user;
+    final displayName = (authUser?.displayName ?? '').isNotEmpty
+        ? authUser!.displayName!
+        : AppStrings.profileUserName;
+    final email = (authUser?.email ?? '').isNotEmpty
+        ? authUser!.email!
+        : AppStrings.profileUserEmail;
+
+    return AppScaffold(
+      currentNavIndex: 4,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 50,
+          ),
+          child: Column(
+            children: [
+              Container(
+                width: 120,
+                height: 120,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.primaryColor,
+                ),
+                child: Center(
+                  child: Image.asset(
+                    AppAssets.profilePic,
+                    width: 120,
+                    height: 120,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 18),
+
+              Text(
+                displayName,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 30,
+                  color: AppColors.primaryColor,
+                ),
+              ),
+              const SizedBox(height: 4),
+
+              Text(
+                email,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 14,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+              const SizedBox(height: 37),
+
+              ProfileMenuItem(
+                icon: AppAssets.edit,
+                title: AppStrings.profileEditProfile,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const EditProfileScreen(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 14),
+
+              ProfileMenuItem(
+                icon: AppAssets.secure,
+                title: AppStrings.profileSecurityPrivacy,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const SecurityPrivacyScreen(),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 14),
+
+              const ProfileMenuItem(
+                icon: AppAssets.theme,
+                title: AppStrings.profileAppTheme,
+                trailingLabel: AppStrings.profileThemeLight,
+              ),
+              const SizedBox(height: 14),
+
+              const ProfileMenuItem(
+                icon: AppAssets.help,
+                title: AppStrings.profileHelpSupport,
+              ),
+              const SizedBox(height: 40),
+
+              SizedBox(
+                width: double.infinity,
+                height: 60,
+                child: ElevatedButton.icon(
+                  onPressed: () async {
+                    await context.read<AuthProvider>().logout();
+
+                    if (!context.mounted) return;
+
+                    Navigator.pushReplacementNamed(
+                      context,
+                      AppRoutes.loginScreen,
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 0,
+                  ),
+                  icon: Image.asset(
+                    AppAssets.logout,
+                    width: 20,
+                    height: 20,
+                    color: AppColors.white,
+                  ),
+                  label: const Text(
+                    AppStrings.profileLogout,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: AppColors.white,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 100),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
