@@ -2,22 +2,28 @@ import 'package:flutter/material.dart';
 import '../../../../Core/Constants/app_color.dart';
 
 class DaySelector extends StatefulWidget {
-  const DaySelector({super.key});
+  final DateTime selectedDate;
+  final ValueChanged<DateTime> onDaySelected;
+
+  const DaySelector({
+    super.key,
+    required this.selectedDate,
+    required this.onDaySelected,
+  });
 
   @override
   State<DaySelector> createState() => _DaySelectorState();
 }
 
 class _DaySelectorState extends State<DaySelector> {
-  int _selectedIndex = 1;
-
   late final List<_DayItem> _days = _buildDays();
 
   List<_DayItem> _buildDays() {
-    final today = DateTime.now();
-    final start = today.subtract(const Duration(days: 1));
-    return List.generate(4, (i) {
-      final date = start.add(Duration(days: i));
+    final now = DateTime.now();
+    final startOfWeek =
+        DateTime(now.year, now.month, now.day - (now.weekday - 1));
+    return List.generate(7, (i) {
+      final date = startOfWeek.add(Duration(days: i));
       return _DayItem(
         day: _dayName(date.weekday),
         date: date.day.toString(),
@@ -31,22 +37,25 @@ class _DaySelectorState extends State<DaySelector> {
     return names[weekday - 1];
   }
 
+  bool _isSameDay(DateTime a, DateTime b) =>
+      a.year == b.year && a.month == b.month && a.day == b.day;
+
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: _days.asMap().entries.map((entry) {
-        final index = entry.key;
-        final item = entry.value;
-        final isSelected = index == _selectedIndex;
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: _days.asMap().entries.map((entry) {
+          final index = entry.key;
+          final item = entry.value;
+          final isSelected = _isSameDay(item.fullDate, widget.selectedDate);
 
-        return Expanded(
-          child: Padding(
+          return Padding(
             padding: EdgeInsets.only(right: index < _days.length - 1 ? 10 : 0),
             child: GestureDetector(
-              onTap: () {
-                setState(() => _selectedIndex = index);
-              },
+              onTap: () => widget.onDaySelected(item.fullDate),
               child: AnimatedContainer(
+                width: 76,
                 duration: const Duration(milliseconds: 200),
                 padding: const EdgeInsets.symmetric(vertical: 21),
                 decoration: BoxDecoration(
@@ -83,9 +92,9 @@ class _DaySelectorState extends State<DaySelector> {
                 ),
               ),
             ),
-          ),
-        );
-      }).toList(),
+          );
+        }).toList(),
+      ),
     );
   }
 }

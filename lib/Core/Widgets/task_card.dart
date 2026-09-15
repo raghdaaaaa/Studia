@@ -8,6 +8,8 @@ class TaskCard extends StatelessWidget {
   final bool showFocusButton;
   final VoidCallback? onFocusTap;
   final bool isCompleted;
+  final bool showCompletionControl;
+  final VoidCallback? onCompletionChanged;
   final Color? backgroundColor;
   final Border? border;
   final double? height;
@@ -22,6 +24,8 @@ class TaskCard extends StatelessWidget {
     this.showFocusButton = true,
     this.onFocusTap,
     this.isCompleted = false,
+    this.showCompletionControl = false,
+    this.onCompletionChanged,
     this.backgroundColor,
     this.border,
     this.height,
@@ -76,6 +80,31 @@ class TaskCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              if (showCompletionControl)
+                GestureDetector(
+                  onTap: onCompletionChanged,
+                  child: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isCompleted
+                            ? AppColors.primaryColor
+                            : AppColors.primaryCard10Color,
+                        width: 2,
+                      ),
+                    ),
+                    child: isCompleted
+                        ? const Icon(
+                            Icons.check,
+                            size: 18,
+                            color: AppColors.primaryColor,
+                          )
+                        : null,
+                  ),
+                ),
               if (teamLabel != null)
                 Row(
                   children: [
@@ -93,6 +122,33 @@ class TaskCard extends StatelessWidget {
                 )
               else
                 const SizedBox.shrink(),
+
+              if (showCompletionControl)
+                GestureDetector(
+                  onTap: onCompletionChanged,
+                  child: Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isCompleted
+                            ? AppColors.primaryColor
+                            : AppColors.primaryCard10Color,
+                        width: 2,
+                      ),
+                    ),
+                    child: isCompleted
+                        ? const Icon(
+                            Icons.check,
+                            size: 18,
+                            color: AppColors.primaryColor,
+                          )
+                        : null,
+                  ),
+                ),
+              const SizedBox(width: 12),
 
               // Focus Button
               if (showFocusButton)

@@ -56,6 +56,9 @@ class AppStrings {
   static const String homeGreeting = "Let's become\nmore Productive";
   static const String homeProgressTitle =
       "You've completed\n70% of today's goals";
+  static const String homeProgressNoTasksTitle = "No tasks yet\nfor today";
+  static const String homeProgressUnitPrefix = "You've completed\n";
+  static const String homeProgressUnitSuffix = "% of today's goals";
   static const String viewTaskBtn = "View Task";
 
   // Card 1
@@ -112,8 +115,16 @@ class AppStrings {
   static const String productivityTotalTasksLabel = "Total Tasks";
   static const String productivityWeeklyOverview = "Weekly Overview";
   static const String productivityRecentAchievement = "Recent Achievement";
-  static const String productivitySevenDaysStreak = "7 Days Streak";
-  static const String productivityStreakSubtitle = "You've been active for a week";
+  static const String productivityPendingLabel = "Pending";
+  static const String productivityCompletionLabel = "Completion";
+  static const String productivityStreakDay = "Day Streak";
+  static const String productivityStreakDays = "Days Streak";
+  static const String productivityStreakSubtitleNone =
+      "Start completing tasks to build your streak";
+  static const String productivityStreakSubtitleActive =
+      "Keep going and maintain your streak";
+  static const String productivityLoadError =
+      "Could not load productivity data.";
 
   // Profile
   static const String profileUserName = "Ahmed Developer";
@@ -122,6 +133,8 @@ class AppStrings {
   static const String profileSecurityPrivacy = "Security & Privacy";
   static const String profileAppTheme = "App Theme";
   static const String profileThemeLight = "Light";
+  static const String profileThemeDark = "Dark";
+  static const String profileThemeSystemDefault = "System Default";
   static const String profileHelpSupport = "Help & Support";
   static const String profileLogout = "Logout";
   static const String profileSaveButton = "Save";
@@ -130,4 +143,40 @@ class AppStrings {
   static const String securityConfirmPassword = "Confirm New Password";
   static const String securityChangePassword = "Change Password";
 
+  // Help & Support
+  static const String helpSupportFaqTitle = "Frequently Asked Questions";
+  static const String helpSupportFaqAddTask = "How do I add a task?";
+  static const String helpSupportFaqAddTaskAnswer =
+      "Tap the + button at the bottom center of the screen from any tab. Fill in the task name, select a category, set a date and time, and press Create Task.";
+  static const String helpSupportFaqMarkCompleted =
+      "How do I mark a task as completed?";
+  static const String helpSupportFaqMarkCompletedAnswer =
+      "Open the task details from the Schedule or Home screen and tap the completion toggle to mark it as done. Completed tasks are reflected in your Productivity stats.";
+  static const String helpSupportFaqProductivity =
+      "How does the productivity progress work?";
+  static const String helpSupportFaqProductivityAnswer =
+      "The Productivity screen tracks your completed tasks, focus hours, weekly overview, and achievement streaks. Progress updates automatically as you complete tasks and use Focus Mode.";
+  static const String helpSupportFaqEditProfile =
+      "Can I change my profile information?";
+  static const String helpSupportFaqEditProfileAnswer =
+      "Yes. Go to Profile and tap Edit Profile to update your display name and other details.";
+  static const String helpSupportFaqChangePassword =
+      "How can I change my password?";
+  static const String helpSupportFaqChangePasswordAnswer =
+      "Go to Profile, tap Security & Privacy, then enter your current password and new password before pressing Change Password.";
+  static const String helpSupportContactTitle = "Contact Support";
+  static const String helpSupportContactMessage =
+      "Need help? Contact the project team for assistance.";
+
+  // Edit Task
+  static const String editTaskTitle = "Edit Task";
+  static const String editTaskSaveButton = "Save Changes";
+  static const String editTaskUpdating = "Saving...";
+  static const String editTaskUpdatedSuccess = "Task updated successfully.";
+  static const String editTaskUpdatedError = "Could not update task: ";
+
+  // Notifications
+  static const String notificationsTitle = "Notifications";
+  static const String notificationsEmpty =
+      "You're all caught up!\nNo pending tasks for today.";
 }

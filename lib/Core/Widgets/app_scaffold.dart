@@ -7,7 +7,7 @@ class AppScaffold extends StatelessWidget {
   final int currentNavIndex;
   final bool showBottomNav;
   final bool showFab;
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
   const AppScaffold({
     super.key,
@@ -15,13 +15,19 @@ class AppScaffold extends StatelessWidget {
     this.currentNavIndex = 0,
     this.showBottomNav = true,
     this.showFab = true,
-    this.backgroundColor = Colors.white,
+    this.backgroundColor,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scaffoldColor = backgroundColor ??
+        (theme.brightness == Brightness.dark
+            ? theme.scaffoldBackgroundColor
+            : Colors.white);
+
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: scaffoldColor,
       extendBody: true,
       bottomNavigationBar: showBottomNav
           ? AppBottomNavBar(currentIndex: currentNavIndex)

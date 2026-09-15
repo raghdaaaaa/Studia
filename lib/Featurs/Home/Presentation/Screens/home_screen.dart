@@ -30,13 +30,19 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: 30),
 
-                  const HomeHeader(),
+                  HomeHeader(
+                    notificationCount: _todayPendingCount(tasks),
+                    onBellTap: () => Navigator.pushNamed(
+                      context,
+                      '/notifications',
+                    ),
+                  ),
 
                   const SizedBox(height: 40),
 
                   ProgressCard(
-                    progress: _calculateProgress(tasks),
-                    message: AppStrings.homeProgressTitle,
+                    progress: _calculateTodayProgress(tasks),
+                    message: _buildTodayProgressMessage(tasks),
                   ),
 
                   const SizedBox(height: 45),
@@ -55,14 +61,40 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  double _calculateProgress(List<TaskModel> tasks) {
-    if (tasks.isEmpty) {
+  double _calculateTodayProgress(List<TaskModel> tasks) {
+    final todayTasks = tasks.where(_isToday).toList();
+    if (todayTasks.isEmpty) {
       return 0;
     }
 
     final completedTasks =
-        tasks.where((task) => task.isCompleted).length;
+        todayTasks.where((task) => task.isCompleted).length;
 
-    return completedTasks / tasks.length;
+    return completedTasks / todayTasks.length;
+  }
+
+  String _buildTodayProgressMessage(List<TaskModel> tasks) {
+    final todayTasks = tasks.where(_isToday).toList();
+    if (todayTasks.isEmpty) {
+      return AppStrings.homeProgressNoTasksTitle;
+    }
+
+    final percent = (_calculateTodayProgress(tasks) * 100).round();
+    return '${AppStrings.homeProgressUnitPrefix}$percent'
+        '${AppStrings.homeProgressUnitSuffix}';
+  }
+
+  int _todayPendingCount(List<TaskModel> tasks) {
+    return tasks
+        .where((task) => _isToday(task) && !task.isCompleted)
+        .length;
+  }
+
+  bool _isToday(TaskModel task) {
+    final now = DateTime.now();
+    final date = task.date;
+    return date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day;
   }
 }

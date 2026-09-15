@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:studia/Core/Routing/router.dart';
 import 'package:studia/Core/Routing/routes.dart';
+import 'package:studia/Core/Theme/app_theme.dart';
+import 'package:studia/Core/Theme/theme_provider.dart';
 import 'package:studia/Featurs/Auth/Presentation/Providers/auth_provider.dart';
 
 void main() async {
@@ -23,12 +25,22 @@ class Studia extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => AuthProvider(),
-      child: const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: AppRouter.generateRoute,
-        initialRoute: AppRoutes.onboardingScreen,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+      ],
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            onGenerateRoute: AppRouter.generateRoute,
+            initialRoute: AppRoutes.onboardingScreen,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeProvider.themeMode,
+          );
+        },
       ),
     );
   }

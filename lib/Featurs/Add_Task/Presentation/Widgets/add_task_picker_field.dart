@@ -7,6 +7,8 @@ class AddTaskPickerField extends StatefulWidget {
   final String label;
   final String iconAsset;
   final PickerType type;
+  final DateTime? initialDate;
+  final TimeOfDay? initialTime;
   final void Function(DateTime)?   onDatePicked;
   final void Function(TimeOfDay)?  onTimePicked;
 
@@ -15,6 +17,8 @@ class AddTaskPickerField extends StatefulWidget {
     required this.label,
     required this.iconAsset,
     required this.type,
+    this.initialDate,
+    this.initialTime,
     this.onDatePicked,
     this.onTimePicked,
   });
@@ -24,8 +28,9 @@ class AddTaskPickerField extends StatefulWidget {
 }
 
 class _AddTaskPickerFieldState extends State<AddTaskPickerField> {
-  DateTime _date = DateTime.now();
-  TimeOfDay _time = const TimeOfDay(hour: 10, minute: 0);
+  late DateTime _date = widget.initialDate ?? DateTime.now();
+  late TimeOfDay _time =
+      widget.initialTime ?? const TimeOfDay(hour: 10, minute: 0);
 
   Future<void> _pick() async {
     if (widget.type == PickerType.date) {

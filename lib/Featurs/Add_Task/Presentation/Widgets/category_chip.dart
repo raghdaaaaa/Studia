@@ -3,15 +3,16 @@ import '../../../../Core/Constants/app_color.dart';
 import '../../../../Core/Constants/app_strings.dart';
 
 class CategoryChipRow extends StatefulWidget {
-  const CategoryChipRow({super.key, this.onChanged});
+  const CategoryChipRow({super.key, this.onChanged, this.initialCategory});
   final void Function(String)? onChanged;
+  final String? initialCategory;
 
   @override
   State<CategoryChipRow> createState() => _CategoryChipRowState();
 }
 
 class _CategoryChipRowState extends State<CategoryChipRow> {
-  String _selected = AppStrings.addTaskDesign;
+  late String _selected = _labelFor(widget.initialCategory);
 
   final List<String> _categories = [
     AppStrings.addTaskDesign,
@@ -23,6 +24,12 @@ class _CategoryChipRowState extends State<CategoryChipRow> {
     if (category == AppStrings.addTaskDevelopment) return 'high';
     if (category == AppStrings.addTaskDesign)      return 'medium';
     return 'low';
+  }
+
+   String _labelFor(String? priority) {
+    if (priority == 'high')  return AppStrings.addTaskDevelopment;
+    if (priority == 'low')   return AppStrings.addTaskStudy;
+    return AppStrings.addTaskDesign;
   }
 
   @override

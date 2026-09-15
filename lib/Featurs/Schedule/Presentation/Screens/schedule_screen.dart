@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:studia/Featurs/Add_Task/Data/Models/task_model.dart';
 import 'package:studia/Featurs/Add_Task/Data/Services/task_service.dart';
 import 'package:studia/Featurs/Focus%20Mode/Presentation/Screens/focus_mode_screen.dart';
+import 'package:studia/Featurs/Schedule/Presentation/Screens/edit_task_screen.dart';
 import 'package:studia/Featurs/Schedule/Presentation/Widgets/day_selector.dart';
 import '../../../../Core/Constants/app_color.dart';
 import '../../../../Core/Constants/app_strings.dart';
@@ -10,8 +11,27 @@ import '../../../../Core/Widgets/app_scaffold.dart';
 import '../../../../Core/Widgets/section_header.dart';
 import '../../../../Core/Widgets/task_card.dart';
 
-class ScheduleScreen extends StatelessWidget {
+class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
+
+  @override
+  State<ScheduleScreen> createState() => _ScheduleScreenState();
+}
+
+class _ScheduleScreenState extends State<ScheduleScreen> {
+  DateTime _selectedDate = DateTime.now();
+  bool _searchActive = false;
+  String _searchQuery = '';
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  bool _isSameDay(DateTime a, DateTime b) =>
+      a.year == b.year && a.month == b.month && a.day == b.day;
 
   @override
   Widget build(BuildContext context) {
@@ -26,32 +46,83 @@ class ScheduleScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Title + Search
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    AppStrings.scheduleTitle,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w800,
-                      fontSize: 30,
-                      color: AppColors.primaryColor,
+              _searchActive
+                  ? Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            autofocus: true,
+                            controller: _searchController,
+                            onChanged: (value) {
+                              setState(() => _searchQuery = value);
+                            },
+                            style: const TextStyle(
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w800,
+                              fontSize: 30,
+                              color: AppColors.primaryColor,
+                            ),
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Search...',
+                              hintStyle: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w800,
+                                fontSize: 30,
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _searchActive = false;
+                              _searchQuery = '';
+                              _searchController.clear();
+                            });
+                          },
+                          child: const Icon(
+                            Icons.close,
+                            color: AppColors.primaryColor,
+                            size: 26,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          AppStrings.scheduleTitle,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w800,
+                            fontSize: 30,
+                            color: AppColors.primaryColor,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() => _searchActive = true);
+                          },
+                          child: const Icon(
+                            Icons.search,
+                            color: AppColors.primaryColor,
+                            size: 26,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: const Icon(
-                      Icons.search,
-                      color: AppColors.primaryColor,
-                      size: 26,
-                    ),
-                  ),
-                ],
-              ),
               const SizedBox(height: 30),
 
               // Day Selector
-              const DaySelector(),
+              DaySelector(
+                selectedDate: _selectedDate,
+                onDaySelected: (date) {
+                  setState(() => _selectedDate = date);
+                },
+              ),
               const SizedBox(height: 28),
 
               // Tasks Header
@@ -81,8 +152,19 @@ class ScheduleScreen extends StatelessWidget {
                   }
 
                   final tasks = snapshot.data!;
+                  var visibleTasks = tasks
+                      .where((task) => _isSameDay(task.date, _selectedDate))
+                      .toList();
 
-                  if (tasks.isEmpty) {
+                  if (_searchActive && _searchQuery.isNotEmpty) {
+                    final query = _searchQuery.toLowerCase();
+                    visibleTasks = visibleTasks
+                        .where((task) =>
+                            task.title.toLowerCase().contains(query))
+                        .toList();
+                  }
+
+                  if (visibleTasks.isEmpty) {
                     return Text(
                       'No tasks yet. Tap + to add your first task.',
                       style: TextStyle(
@@ -96,7 +178,7 @@ class ScheduleScreen extends StatelessWidget {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      for (final task in tasks)
+                      for (final task in visibleTasks)
                         _buildTaskCard(context, taskService, task),
                     ],
                   );
@@ -127,16 +209,18 @@ class ScheduleScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
       child: GestureDetector(
-        onTap: () {
-          taskService.updateTaskCompletion(
-            taskId: task.id,
-            isCompleted: !task.isCompleted,
-          );
-        },
-        onLongPress: () => _confirmDelete(context, taskService, task),
+        onTap: () {},
+        onLongPress: () => _showTaskActions(context, taskService, task),
         child: TaskCard(
           title: task.title,
           isCompleted: task.isCompleted,
+          showCompletionControl: true,
+          onCompletionChanged: () {
+            taskService.updateTaskCompletion(
+              taskId: task.id,
+              isCompleted: !task.isCompleted,
+            );
+          },
           backgroundColor: bgColor,
           border: showBorder
               ? Border.all(
@@ -163,32 +247,43 @@ class ScheduleScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _confirmDelete(
+  Future<void> _showTaskActions(
     BuildContext context,
     TaskService taskService,
     TaskModel task,
   ) async {
-    final confirmed = await showDialog<bool>(
+    final action = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete task?'),
-        content: Text('"${task.title}" will be permanently deleted.'),
+        title: const Text('Task'),
+        content: Text('"${task.title}"'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context, false),
+            onPressed: () => Navigator.pop(context),
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () => Navigator.pop(context, true),
+            onPressed: () => Navigator.pop(context, 'edit'),
+            child: const Text('Edit'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'delete'),
             child: const Text('Delete'),
           ),
         ],
       ),
     );
 
-    if (confirmed != true) return;
+    if (!mounted) return;
 
-    await taskService.deleteTask(task.id);
+    if (action == 'edit') {
+      Navigator.push(
+        this.context,
+        MaterialPageRoute(builder: (_) => EditTaskScreen(task: task)),
+      );
+    } else if (action == 'delete') {
+      await taskService.deleteTask(task.id);
+    }
   }
 
   String _formatDate(DateTime date) {

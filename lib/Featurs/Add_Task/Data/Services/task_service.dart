@@ -32,6 +32,23 @@ class TaskService {
     });
   }
 
+  Future<void> updateTask({
+    required String taskId,
+    required String title,
+    required String description,
+    required String category,
+    required DateTime date,
+    required String time,
+  }) async {
+    await _firestore.collection('tasks').doc(taskId).update({
+      'title': title,
+      'description': description,
+      'category': category,
+      'date': Timestamp.fromDate(date),
+      'time': time,
+    });
+  }
+
   Future<void> updateTaskCompletion({
     required String taskId,
     required bool isCompleted,

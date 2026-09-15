@@ -4,6 +4,7 @@ import 'package:studia/Featurs/Add_Task/Data/Services/task_service.dart';
 import '../../../../Core/Constants/app_color.dart';
 import '../../../../Core/Constants/app_strings.dart';
 import '../../../../Core/Constants/assets.dart';
+import '../../../../Core/Widgets/app_loader.dart';
 import '../../../../Core/Widgets/app_scaffold.dart';
 import '../../../../Core/Widgets/section_header.dart';
 import '../Widgets/achievement_card.dart';
@@ -25,15 +26,48 @@ class ProductivityScreen extends StatelessWidget {
           child: StreamBuilder<List<TaskModel>>(
             stream: taskService.getTasks(),
             builder: (context, snapshot) {
-              final tasks = snapshot.data ?? [];
+              if (snapshot.hasError) {
+                return const Padding(
+                  padding: EdgeInsets.only(top: 30),
+                  child: Text(
+                    AppStrings.productivityLoadError,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 14,
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                );
+              }
+
+              if (!snapshot.hasData) {
+                return const Padding(
+                  padding: EdgeInsets.only(top: 30),
+                  child: AppLoader(),
+                );
+              }
+
+              final tasks = snapshot.data!;
 
               final completedCount =
                   tasks.where((task) => task.isCompleted).length;
               final totalCount = tasks.length;
+              final pendingCount = totalCount - completedCount;
+              final completionPercent = totalCount == 0
+                  ? 0
+                  : ((completedCount / totalCount) * 100).round();
 
               final now = DateTime.now();
               final activeIndex = now.weekday - 1;
               final dailyFractions = _weeklyFractions(tasks, now);
+
+              final streak = _currentStreak(tasks, now);
+              final streakTitle = streak == 1
+                  ? '1 ${AppStrings.productivityStreakDay}'
+                  : '$streak ${AppStrings.productivityStreakDays}';
+              final streakSubtitle = streak <= 0
+                  ? AppStrings.productivityStreakSubtitleNone
+                  : AppStrings.productivityStreakSubtitleActive;
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,6 +100,25 @@ class ProductivityScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 14),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: StatCard(
+                          value: '$pendingCount',
+                          label: AppStrings.productivityPendingLabel,
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: StatCard(
+                          value: '$completionPercent%',
+                          label: AppStrings.productivityCompletionLabel,
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 50),
 
                   const SectionHeader(
@@ -80,10 +133,10 @@ class ProductivityScreen extends StatelessWidget {
                   const SectionHeader(
                       title: AppStrings.productivityRecentAchievement),
                   const SizedBox(height: 16),
-                  const AchievementCard(
+                  AchievementCard(
                     icon: AppAssets.rewaed,
-                    title: AppStrings.productivitySevenDaysStreak,
-                    subtitle: AppStrings.productivityStreakSubtitle,
+                    title: streakTitle,
+                    subtitle: streakSubtitle,
                   ),
 
                   const SizedBox(height: 100),
@@ -94,6 +147,25 @@ class ProductivityScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  int _currentStreak(List<TaskModel> tasks, DateTime now) {
+    final completedDates = tasks
+        .where((task) => task.isCompleted)
+        .map(
+          (task) => DateTime(task.date.year, task.date.month, task.date.day),
+        )
+        .toSet();
+
+    var streak = 0;
+    var cursor = DateTime(now.year, now.month, now.day);
+
+    while (completedDates.contains(cursor)) {
+      streak++;
+      cursor = DateTime(cursor.year, cursor.month, cursor.day - 1);
+    }
+
+    return streak;
   }
 
   List<double> _weeklyFractions(List<TaskModel> tasks, DateTime now) {

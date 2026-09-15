@@ -13,11 +13,14 @@ class AppBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BottomAppBar(
       height: 65,
       shape: const CircularNotchedRectangle(),
       notchMargin: 15,
-      color: Colors.white,
+      color: theme.brightness == Brightness.dark
+          ? theme.scaffoldBackgroundColor
+          : Colors.white,
       elevation: 40,
       padding: EdgeInsets.zero,
       child: Row(

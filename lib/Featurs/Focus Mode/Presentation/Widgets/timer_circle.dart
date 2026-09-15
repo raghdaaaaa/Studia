@@ -76,7 +76,7 @@ class _CirclePainter extends CustomPainter {
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       0.5*.5707963,
-      0.5 * 3.14159265 * progress,
+      2 * 3.14159265 * progress,
       false,
       fgPaint,
     );

@@ -118,7 +118,10 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final progress = _remainingSeconds / _totalSeconds;
+    final progress =
+        ((_totalSeconds - _remainingSeconds) / _totalSeconds)
+            .clamp(0.0, 1.0)
+            .toDouble();
 
     return AppScaffold(
       showBottomNav: false,
