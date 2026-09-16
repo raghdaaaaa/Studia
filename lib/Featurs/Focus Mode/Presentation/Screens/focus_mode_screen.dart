@@ -3,10 +3,11 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:studia/Featurs/Add_Task/Data/Services/task_service.dart';
+import 'package:studia/Featurs/Focus%20Mode/Data/Services/focus_session_store.dart';
 import 'package:studia/Featurs/Focus%20Mode/Presentation/Widgets/timer_circle.dart';
 import 'package:studia/Featurs/Focus%20Mode/Presentation/Widgets/timer_controls.dart';
-import '../../../../Core/Constants/app_color.dart';
 import '../../../../Core/Constants/app_strings.dart';
+import '../../../../Core/Theme/app_palette.dart';
 import '../../../../Core/Widgets/app_scaffold.dart';
 
 class FocusModeScreen extends StatefulWidget {
@@ -27,10 +28,32 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
   static const int _totalSeconds = 25 * 60;
 
   final TaskService _taskService = TaskService();
+  final FocusSessionStore _sessionStore = FocusSessionStore();
 
   Timer? _timer;
   int _remainingSeconds = _totalSeconds;
+  int _todaySessions = 0;
   bool _isRunning = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTodaySessions();
+  }
+
+  Future<void> _loadTodaySessions() async {
+    final count = await _sessionStore.todaySessionCount();
+    if (!mounted) return;
+    setState(() {
+      _todaySessions = count;
+    });
+  }
+
+  // A single focus block is 4 sessions; show the current session (capped).
+  int get _currentSessionNumber {
+    final next = _todaySessions + 1;
+    return next.clamp(1, 4);
+  }
 
   @override
   void dispose() {
@@ -95,8 +118,17 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
         taskId: widget.taskId,
         isCompleted: true,
       );
+      await _sessionStore.recordSession();
 
       if (!mounted) return;
+
+      final count = await _sessionStore.todaySessionCount();
+      if (!mounted) return;
+
+      setState(() {
+        _todaySessions = count;
+      });
+
       _showMessage('Focus session complete!');
     } catch (e) {
       if (!mounted) return;
@@ -139,13 +171,13 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         AppStrings.focusModeTitle,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w800,
                           fontSize: 30,
-                          color: AppColors.primaryColor,
+                          color: context.accentColor,
                         ),
                       ),
                       const SizedBox(height: 40),
@@ -157,30 +189,30 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
                             widget.taskTitle.isEmpty
                                 ? AppStrings.focusModeCurrentTask
                                 : widget.taskTitle,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w700,
                               fontSize: 30,
-                              color: AppColors.primaryColor,
+                              color: context.accentColor,
                             ),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 6),
-                          const Row(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
                                 Icons.label,
                                 size: 14,
-                                color: AppColors.textSecondary,
+                                color: context.textSecondaryColor,
                               ),
-                              SizedBox(width: 4),
+                              const SizedBox(width: 4),
                               Text(
-                                'Session 1 of 4',
+                                'Session $_currentSessionNumber of 4',
                                 style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 14,
-                                  color: AppColors.textSecondary,
+                                  color: context.textSecondaryColor,
                                 ),
                               ),
                             ],
@@ -214,8 +246,8 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
-                            side: const BorderSide(
-                              color: AppColors.primaryColor,
+                            side: BorderSide(
+                              color: context.accentColor,
                               width: 2,
                             ),
                             padding: const EdgeInsets.symmetric(
@@ -223,13 +255,13 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
                               vertical: 15,
                             ),
                           ),
-                          child: const Text(
+                          child: Text(
                             AppStrings.focusModeGiveUp,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w600,
                               fontSize: 15,
-                              color: AppColors.primaryColor,
+                              color: context.accentColor,
                             ),
                           ),
                         ),

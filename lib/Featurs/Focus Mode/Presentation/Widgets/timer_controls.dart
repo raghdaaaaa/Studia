@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../Core/Constants/app_color.dart';
+import '../../../../Core/Theme/app_palette.dart';
 
 class TimerControls extends StatelessWidget {
   final bool isRunning;
@@ -24,13 +25,13 @@ class TimerControls extends StatelessWidget {
           child: Container(
             width: 80,
             height: 80,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.primaryCard10Color,
+              color: context.surfaceColor,
             ),
-            child: const Icon(
+            child: Icon(
               Icons.stop_rounded,
-              color: AppColors.primaryColor,
+              color: context.accentColor,
               size: 30,
             ),
           ),
@@ -43,9 +44,9 @@ class TimerControls extends StatelessWidget {
           child: Container(
             width: 80,
             height: 80,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.primaryColor,
+              color: context.primaryColor,
             ),
             child: Icon(
               isRunning ? Icons.pause_rounded : Icons.play_arrow_rounded,

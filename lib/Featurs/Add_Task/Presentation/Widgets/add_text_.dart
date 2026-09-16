@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../Core/Constants/app_color.dart';
+import '../../../../Core/Theme/app_palette.dart';
 
 class AppTextField extends StatelessWidget {
   final String hint;
@@ -24,21 +24,21 @@ class AppTextField extends StatelessWidget {
       maxLines: maxLines,
       keyboardType: keyboardType,
       validator: validator,
-      style: const TextStyle(
+      style: TextStyle(
         fontFamily: 'Poppins',
         fontSize: 16,
-        color: AppColors.primaryColor,
+        color: context.accentColor,
       ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: const TextStyle(
+        hintStyle: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 18,
           fontWeight: FontWeight.w500,
-          color: AppColors.textSecondary,
+          color: context.textSecondaryColor,
         ),
         filled: true,
-        fillColor: AppColors.primaryCard10Color,
+        fillColor: context.fieldFillColor,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 14,
           vertical: 17,
@@ -53,8 +53,8 @@ class AppTextField extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: AppColors.primaryColor,
+          borderSide: BorderSide(
+            color: context.accentColor,
             width: 2,
           ),
         ),

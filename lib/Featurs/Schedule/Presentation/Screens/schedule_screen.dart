@@ -6,6 +6,8 @@ import 'package:studia/Featurs/Schedule/Presentation/Screens/edit_task_screen.da
 import 'package:studia/Featurs/Schedule/Presentation/Widgets/day_selector.dart';
 import '../../../../Core/Constants/app_color.dart';
 import '../../../../Core/Constants/app_strings.dart';
+import '../../../../Core/Constants/task_category.dart';
+import '../../../../Core/Theme/app_palette.dart';
 import '../../../../Core/Widgets/app_loader.dart';
 import '../../../../Core/Widgets/app_scaffold.dart';
 import '../../../../Core/Widgets/section_header.dart';
@@ -56,20 +58,20 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                             onChanged: (value) {
                               setState(() => _searchQuery = value);
                             },
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w800,
                               fontSize: 30,
-                              color: AppColors.primaryColor,
+                              color: context.accentColor,
                             ),
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: 'Search...',
                               hintStyle: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w800,
                                 fontSize: 30,
-                                color: AppColors.textSecondary,
+                                color: context.textSecondaryColor,
                               ),
                             ),
                           ),
@@ -82,9 +84,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                               _searchController.clear();
                             });
                           },
-                          child: const Icon(
+                          child: Icon(
                             Icons.close,
-                            color: AppColors.primaryColor,
+                            color: context.accentColor,
                             size: 26,
                           ),
                         ),
@@ -93,22 +95,22 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           AppStrings.scheduleTitle,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w800,
                             fontSize: 30,
-                            color: AppColors.primaryColor,
+                            color: context.accentColor,
                           ),
                         ),
                         GestureDetector(
                           onTap: () {
                             setState(() => _searchActive = true);
                           },
-                          child: const Icon(
+                          child: Icon(
                             Icons.search,
-                            color: AppColors.primaryColor,
+                            color: context.accentColor,
                             size: 26,
                           ),
                         ),
@@ -139,7 +141,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
-                        color: AppColors.textSecondary,
+                        color: context.textSecondaryColor,
                       ),
                     );
                   }
@@ -170,7 +172,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
-                        color: AppColors.textSecondary,
+                        color: context.textSecondaryColor,
                       ),
                     );
                   }
@@ -198,13 +200,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     TaskService taskService,
     TaskModel task,
   ) {
-    final bgColor = task.category == 'high'
-        ? AppColors.primaryCardColor
-        : task.category == 'medium'
-            ? AppColors.primaryCard10Color
-            : AppColors.backgroundColor;
-
-    final showBorder = task.category == 'low';
+    final bgColor = TaskCategory.background(
+      task.category,
+      isDark: context.isDarkMode,
+    );
+    final showBorder = TaskCategory.showBorder(task.category);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 14),
@@ -215,21 +215,23 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           title: task.title,
           isCompleted: task.isCompleted,
           showCompletionControl: true,
-          onCompletionChanged: () {
-            taskService.updateTaskCompletion(
-              taskId: task.id,
-              isCompleted: !task.isCompleted,
-            );
-          },
+          onCompletionChanged: () => _toggleCompletion(
+            context,
+            taskService,
+            task,
+          ),
           backgroundColor: bgColor,
           border: showBorder
               ? Border.all(
-                  color: AppColors.primaryColor.withValues(alpha: 0.7),
+                  color: TaskCategory.border(
+                    task.category,
+                    isDark: context.isDarkMode,
+                  ),
                   width: 1.5,
                 )
               : null,
           timeRange: '${_formatDate(task.date)}  •  ${task.time}',
-          teamLabel: task.category,
+          teamLabel: TaskCategory.label(task.category),
           showFocusButton: true,
           onFocusTap: () {
             Navigator.push(
@@ -245,6 +247,24 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _toggleCompletion(
+    BuildContext context,
+    TaskService taskService,
+    TaskModel task,
+  ) async {
+    try {
+      await taskService.updateTaskCompletion(
+        taskId: task.id,
+        isCompleted: !task.isCompleted,
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not update task: $e')),
+      );
+    }
   }
 
   Future<void> _showTaskActions(
@@ -282,7 +302,75 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         MaterialPageRoute(builder: (_) => EditTaskScreen(task: task)),
       );
     } else if (action == 'delete') {
-      await taskService.deleteTask(task.id);
+      final confirmed = await showDialog<bool>(
+        context: this.context,
+        builder: (context) => AlertDialog(
+          backgroundColor: context.isDarkMode
+              ? AppColors.darkCard
+              : AppColors.backgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(
+            'Delete task?',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w700,
+              color: context.accentColor,
+            ),
+          ),
+          content: Text(
+            '"${task.title}" will be permanently removed.',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+              color: context.textSecondaryColor,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(
+                'Cancel',
+                style: TextStyle(color: context.textSecondaryColor),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: context.primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 0,
+              ),
+              child: const Text(
+                'Delete',
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+
+      if (confirmed != true || !mounted) return;
+
+      try {
+        await taskService.deleteTask(task.id);
+        if (!mounted) return;
+        ScaffoldMessenger.of(this.context).showSnackBar(
+          const SnackBar(content: Text('Task deleted')),
+        );
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(this.context).showSnackBar(
+          SnackBar(content: Text('Could not delete task: $e')),
+        );
+      }
     }
   }
 

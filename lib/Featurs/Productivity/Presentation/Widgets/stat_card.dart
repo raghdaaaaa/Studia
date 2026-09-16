@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../Core/Constants/app_color.dart';
+import '../../../../Core/Theme/app_palette.dart';
 
 class StatCard extends StatelessWidget {
   final String value;
@@ -16,7 +16,7 @@ class StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: context.elevatedCardColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
@@ -31,20 +31,20 @@ class StatCard extends StatelessWidget {
         children: [
           Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w800,
               fontSize: 45,
-              color: AppColors.primaryColor,
+              color: context.accentColor,
             ),
           ),
           const SizedBox(height: 4),
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 13,
-              color: AppColors.textSecondary,
+              color: context.textSecondaryColor,
             ),
           ),
         ],

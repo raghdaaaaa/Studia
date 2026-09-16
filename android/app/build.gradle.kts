@@ -24,6 +24,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
+    buildTypes {
+        release {
+            // For local release testing only. Replace with a real signingConfig
+            // for production publishing.
+            signingConfig = signingConfigs.getByName("debug")
+        }
+    }
 }
 
 kotlin {

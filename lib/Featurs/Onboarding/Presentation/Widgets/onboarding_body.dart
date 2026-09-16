@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:studia/Core/Constants/app_color.dart';
+import 'package:studia/Core/Theme/app_palette.dart';
 import 'package:studia/Featurs/Onboarding/Data/Models/onboarding_model.dart';
 
 class OnboardingBody extends StatelessWidget {
@@ -39,7 +39,7 @@ class OnboardingBody extends StatelessWidget {
           const SizedBox(height: 60),
 
           // 3. Dots indicator
-          _buildDots(),
+          _buildDots(context),
 
           const SizedBox(height: 50),
 
@@ -51,10 +51,10 @@ class OnboardingBody extends StatelessWidget {
                 Text(
                   data.title,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.primaryColor,
+                    color: context.accentColor,
                     fontFamily: 'Poppins',
                   ),
                 ),
@@ -62,10 +62,10 @@ class OnboardingBody extends StatelessWidget {
                 Text(
                   data.desc,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w400,
-                    color: AppColors.primaryColor,
+                    color: context.accentColor,
                     height: 1.4,
                     fontFamily: 'Poppins',
                   ),
@@ -78,7 +78,7 @@ class OnboardingBody extends StatelessWidget {
     );
   }
 
-  Widget _buildDots() {
+  Widget _buildDots(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
@@ -88,10 +88,12 @@ class OnboardingBody extends StatelessWidget {
           width: 10,
           height: 10,
           decoration: BoxDecoration(
-            color: currentPage == index ? AppColors.primaryColor : Colors.transparent,
+            color: currentPage == index
+                ? context.accentColor
+                : Colors.transparent,
             shape: BoxShape.circle,
             border: Border.all(
-              color: AppColors.primaryColor,
+              color: context.accentColor,
               width: 1.5,
             ),
           ),

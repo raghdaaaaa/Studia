@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../Core/Constants/app_color.dart';
+import '../../../../Core/Theme/app_palette.dart';
 
 class AchievementCard extends StatelessWidget {
   final String icon;
@@ -18,7 +18,7 @@ class AchievementCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
       decoration: BoxDecoration(
-        color: AppColors.primaryCardColor,
+        color: context.surfaceColorStrong,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -27,7 +27,7 @@ class AchievementCard extends StatelessWidget {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: AppColors.primaryCardColor,
+              color: context.surfaceColorStrong,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Center(
@@ -41,20 +41,20 @@ class AchievementCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
-                    color: AppColors.primaryColor,
+                    color: context.textPrimaryColor,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
-                    color: AppColors.primaryColor,
+                    color: context.textPrimaryColor,
                   ),
                 ),
               ],

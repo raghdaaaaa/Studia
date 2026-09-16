@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../Core/Constants/app_color.dart';
 import '../../../../Core/Constants/assets.dart';
+import '../../../../Core/Constants/task_category.dart';
+import '../../../../Core/Theme/app_palette.dart';
 import 'package:studia/Featurs/Add_Task/Data/Models/task_model.dart';
-import 'package:studia/Featurs/Add_Task/Data/Services/task_service.dart';
 
 class ScheduleGrid extends StatelessWidget {
   final List<TaskModel> tasks;
@@ -27,17 +27,18 @@ class ScheduleGrid extends StatelessWidget {
             children: [
               if (firstTask != null)
                 _buildTaskCard(
+                  context: context,
                   task: firstTask,
                   image: _getTaskImage(firstTask),
                   isTall: true,
                 )
               else
-                _buildEmptyCard(),
+                _buildEmptyCard(context),
               const SizedBox(height: 10),
               if (tasks.length > 3)
-                _buildViewMoreCard(tasks.length - 3)
+                _buildViewMoreCard(context, tasks.length - 3)
               else
-                _buildEmptyCard(),
+                _buildEmptyCard(context),
             ],
           ),
         ),
@@ -47,20 +48,22 @@ class ScheduleGrid extends StatelessWidget {
             children: [
               if (secondTask != null)
                 _buildTaskCard(
+                  context: context,
                   task: secondTask,
                   hasShadow: true,
                 )
               else
-                _buildEmptyCard(),
+                _buildEmptyCard(context),
               const SizedBox(height: 6),
               if (thirdTask != null)
                 _buildTaskCard(
+                  context: context,
                   task: thirdTask,
                   image: _getTaskImage(thirdTask),
                   isTall: true,
                 )
               else
-                _buildEmptyCard(),
+                _buildEmptyCard(context),
             ],
           ),
         ),
@@ -68,27 +71,20 @@ class ScheduleGrid extends StatelessWidget {
     );
   }
 
-  Future<void> _toggleTaskCompletion(TaskModel task) async {
-    final taskService = TaskService();
-
-    await taskService.updateTaskCompletion(
-      taskId: task.id,
-      isCompleted: !task.isCompleted,
-    );
-  }
-
   Widget _buildTaskCard({
+    required BuildContext context,
     required TaskModel task,
     String? image,
     bool hasShadow = false,
     bool isTall = false,
   }) {
-    final cardColor = _getTaskColor(task.category);
+    final cardColor = TaskCategory.background(
+      task.category,
+      isDark: context.isDarkMode,
+    );
 
-    return GestureDetector(
-      onTap: () => _toggleTaskCompletion(task),
-      child: Container(
-        width: double.infinity,
+    return Container(
+      width: double.infinity,
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
           vertical: 22,
@@ -96,6 +92,15 @@ class ScheduleGrid extends StatelessWidget {
         decoration: BoxDecoration(
           color: cardColor,
           borderRadius: BorderRadius.circular(30),
+          border: TaskCategory.showBorder(task.category)
+              ? Border.all(
+                  color: TaskCategory.border(
+                    task.category,
+                    isDark: context.isDarkMode,
+                  ),
+                  width: 1.5,
+                )
+              : null,
           boxShadow: hasShadow || cardColor == Colors.white
               ? [
                   BoxShadow(
@@ -113,10 +118,10 @@ class ScheduleGrid extends StatelessWidget {
               task.title,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: context.textPrimaryColor,
                 fontFamily: 'Poppins',
                 height: 1.2,
               ),
@@ -127,7 +132,7 @@ class ScheduleGrid extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: AppColors.textPrimary.withAlpha(150),
+                color: context.textPrimaryColor.withAlpha(150),
                 fontFamily: 'Poppins',
               ),
             ),
@@ -143,11 +148,10 @@ class ScheduleGrid extends StatelessWidget {
             ],
           ],
         ),
-      ),
     );
   }
 
-  Widget _buildEmptyCard() {
+  Widget _buildEmptyCard(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
@@ -155,23 +159,23 @@ class ScheduleGrid extends StatelessWidget {
         vertical: 35,
       ),
       decoration: BoxDecoration(
-        color: AppColors.primaryCard10Color,
+        color: context.surfaceColor,
         borderRadius: BorderRadius.circular(30),
       ),
-      child: const Center(
+      child: Center(
         child: Text(
           'No task yet',
           style: TextStyle(
             fontSize: 16,
             fontFamily: 'Poppins',
-            color: AppColors.textSecondary,
+            color: context.textSecondaryColor,
           ),
         ),
       ),
     );
   }
 
-  Widget _buildViewMoreCard(int remainingTasks) {
+  Widget _buildViewMoreCard(BuildContext context, int remainingTasks) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
@@ -179,7 +183,7 @@ class ScheduleGrid extends StatelessWidget {
         horizontal: 20,
       ),
       decoration: BoxDecoration(
-        color: AppColors.primaryColor,
+        color: context.primaryColor,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
@@ -217,22 +221,6 @@ class ScheduleGrid extends StatelessWidget {
     );
   }
 
-  Color _getTaskColor(String category) {
-    switch (category) {
-      case 'high':
-        return AppColors.primaryCard10Color;
-
-      case 'medium':
-        return AppColors.primaryCardColor;
-
-      case 'low':
-        return Colors.white;
-
-      default:
-        return AppColors.primaryCard10Color;
-    }
-  }
-
   String? _getTaskImage(TaskModel task) {
     switch (task.category) {
       case 'medium':
@@ -246,3 +234,7 @@ class ScheduleGrid extends StatelessWidget {
     }
   }
 }
+
+
+
+

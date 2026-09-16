@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../Core/Constants/app_color.dart';
-import '../../../Core/Routing/routes.dart';
+import 'package:studia/Core/Constants/app_color.dart';
+import 'package:studia/Core/Routing/routes.dart';
+import 'package:studia/Core/Theme/app_palette.dart';
 
 class DebugScreen extends StatelessWidget {
   const DebugScreen({super.key});
@@ -10,7 +11,7 @@ class DebugScreen extends StatelessWidget {
     _DebugItem(label: 'Sign In', route: AppRoutes.loginScreen),
     _DebugItem(label: 'Sign Up', route: AppRoutes.signupScreen),
     _DebugItem(label: 'Forgot Password', route: AppRoutes.forgotpasswordScreen),
-    _DebugItem(label: 'OTP', route: AppRoutes.otpScreen),
+    
     _DebugItem(label: 'Home', route: AppRoutes.homeScreen),
     _DebugItem(label: 'Schedule', route: AppRoutes.scheduleScreen),
     _DebugItem(label: 'Add Task', route: AppRoutes.addTaskScreen),
@@ -22,9 +23,11 @@ class DebugScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: context.isDarkMode
+          ? AppColors.darkBackground
+          : AppColors.backgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: AppBarTheme.of(context).backgroundColor,
         title: const Text(
           '🛠 Debug — Screen Navigator',
           style: TextStyle(
@@ -45,7 +48,7 @@ class DebugScreen extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: context.elevatedCardColor,
                 borderRadius: BorderRadius.circular(14),
                 boxShadow: [
                   BoxShadow(
@@ -60,17 +63,17 @@ class DebugScreen extends StatelessWidget {
                 children: [
                   Text(
                     item.label,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w600,
                       fontSize: 15,
-                      color: AppColors.primaryColor,
+                      color: context.accentColor,
                     ),
                   ),
-                  const Icon(
+                  Icon(
                     Icons.arrow_forward_ios,
                     size: 16,
-                    color: AppColors.textSecondary,
+                    color: context.textSecondaryColor,
                   ),
                 ],
               ),

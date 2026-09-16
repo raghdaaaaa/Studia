@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:studia/Core/Constants/app_color.dart';
+import 'package:studia/Core/Theme/app_palette.dart';
 import 'package:studia/Core/Constants/app_strings.dart';
 import 'package:studia/Core/Constants/assets.dart';
 import 'package:studia/Core/Routing/routes.dart';
@@ -74,7 +75,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.pageBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
@@ -96,12 +97,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
               const SizedBox(height: 28),
 
-              const Text(
+              Text(
                 AppStrings.signUpTitle,
                 style: TextStyle(
                   fontSize: 23.5,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: context.textPrimaryColor,
                   fontFamily: 'Poppins',
                 ),
               ),
@@ -179,7 +180,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         });
                       },
                       activeThumbColor: Colors.white,
-                      activeTrackColor: AppColors.primaryColor,
+                      activeTrackColor: context.primaryColor,
                       inactiveThumbColor: Colors.white,
                       inactiveTrackColor: Colors.grey,
                     ),
@@ -198,7 +199,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       onPressed:
                           authProvider.isLoading ? null : _signUp,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryColor,
+                        backgroundColor: context.primaryColor,
                         shape: const StadiumBorder(),
                         elevation: 0,
                       ),
@@ -235,9 +236,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       AppRoutes.loginScreen,
                     );
                   },
-                  child: RichText(
-                    text: const TextSpan(
-                      text: AppStrings.alreadyHaveAccount,
+                  child: Text.rich(
+                    TextSpan(
                       style: TextStyle(
                         color: AppColors.textSecondary,
                         fontSize: 15,
@@ -245,9 +245,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       children: [
                         TextSpan(
+                          text: AppStrings.alreadyHaveAccount,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'Poppins',
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        TextSpan(
                           text: AppStrings.signInLink,
                           style: TextStyle(
-                            color: AppColors.textPrimary,
+                            color: context.textPrimaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

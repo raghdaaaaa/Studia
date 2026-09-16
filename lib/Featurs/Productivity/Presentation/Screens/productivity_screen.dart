@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:studia/Featurs/Add_Task/Data/Models/task_model.dart';
 import 'package:studia/Featurs/Add_Task/Data/Services/task_service.dart';
-import '../../../../Core/Constants/app_color.dart';
+import 'package:studia/Featurs/Focus%20Mode/Data/Services/focus_session_store.dart';
 import '../../../../Core/Constants/app_strings.dart';
 import '../../../../Core/Constants/assets.dart';
+import '../../../../Core/Theme/app_palette.dart';
 import '../../../../Core/Widgets/app_loader.dart';
 import '../../../../Core/Widgets/app_scaffold.dart';
 import '../../../../Core/Widgets/section_header.dart';
@@ -11,8 +12,30 @@ import '../Widgets/achievement_card.dart';
 import '../Widgets/stat_card.dart';
 import '../Widgets/weekly_chart.dart';
 
-class ProductivityScreen extends StatelessWidget {
+class ProductivityScreen extends StatefulWidget {
   const ProductivityScreen({super.key});
+
+  @override
+  State<ProductivityScreen> createState() => _ProductivityScreenState();
+}
+
+class _ProductivityScreenState extends State<ProductivityScreen> {
+  final FocusSessionStore _sessionStore = FocusSessionStore();
+  int _todaySessions = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTodaySessions();
+  }
+
+  Future<void> _loadTodaySessions() async {
+    final count = await _sessionStore.todaySessionCount();
+    if (!mounted) return;
+    setState(() {
+      _todaySessions = count;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +50,14 @@ class ProductivityScreen extends StatelessWidget {
             stream: taskService.getTasks(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return const Padding(
-                  padding: EdgeInsets.only(top: 30),
+                return Padding(
+                  padding: const EdgeInsets.only(top: 30),
                   child: Text(
                     AppStrings.productivityLoadError,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
-                      color: AppColors.textSecondary,
+                      color: context.textSecondaryColor,
                     ),
                   ),
                 );
@@ -56,6 +79,7 @@ class ProductivityScreen extends StatelessWidget {
               final completionPercent = totalCount == 0
                   ? 0
                   : ((completedCount / totalCount) * 100).round();
+              final focusHoursText = _formatFocusHours(_todaySessions);
 
               final now = DateTime.now();
               final activeIndex = now.weekday - 1;
@@ -72,13 +96,13 @@ class ProductivityScreen extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     AppStrings.productivityTitle,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w800,
                       fontSize: 30,
-                      color: AppColors.primaryColor,
+                      color: context.accentColor,
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -118,6 +142,12 @@ class ProductivityScreen extends StatelessWidget {
                         ),
                       ),
                     ],
+                  ),
+                  const SizedBox(height: 14),
+
+                  StatCard(
+                    value: focusHoursText,
+                    label: AppStrings.productivityHoursFocusedLabel,
                   ),
                   const SizedBox(height: 50),
 
@@ -166,6 +196,17 @@ class ProductivityScreen extends StatelessWidget {
     }
 
     return streak;
+  }
+
+  String _formatFocusHours(int sessions) {
+    const sessionMinutes = 25;
+    final totalMinutes = sessions * sessionMinutes;
+    final hours = totalMinutes ~/ 60;
+    final minutes = totalMinutes % 60;
+
+    if (hours == 0) return '${minutes}m';
+    if (minutes == 0) return '${hours}h';
+    return '${hours}h ${minutes}m';
   }
 
   List<double> _weeklyFractions(List<TaskModel> tasks, DateTime now) {

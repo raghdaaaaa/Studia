@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../Core/Constants/app_color.dart';
 import '../../Core/Constants/assets.dart';
 import '../../Core/Routing/routes.dart';
+import '../../Core/Theme/app_palette.dart';
 
 class AppBottomNavBar extends StatelessWidget {
   final int currentIndex;
@@ -19,7 +19,7 @@ class AppBottomNavBar extends StatelessWidget {
       shape: const CircularNotchedRectangle(),
       notchMargin: 15,
       color: theme.brightness == Brightness.dark
-          ? theme.scaffoldBackgroundColor
+          ? context.elevatedCardColor
           : Colors.white,
       elevation: 40,
       padding: EdgeInsets.zero,
@@ -46,7 +46,7 @@ class AppBottomNavBar extends StatelessWidget {
       child: Center(
         child: ColorFiltered(
           colorFilter: ColorFilter.mode(
-            isActive ? AppColors.primaryColor : Colors.grey.shade400,
+            isActive ? context.accentColor : context.inactiveIconColor,
             BlendMode.srcIn,
           ),
           child: Image.asset(

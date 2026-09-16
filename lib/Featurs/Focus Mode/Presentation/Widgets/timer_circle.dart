@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../Core/Constants/app_color.dart';
+import '../../../../Core/Theme/app_palette.dart';
 
 class TimerCircle extends StatelessWidget {
   final double progress;
@@ -19,26 +19,30 @@ class TimerCircle extends StatelessWidget {
         width: 280,
         height: 270,
         child: CustomPaint(
-          painter: _CirclePainter(progress: progress),
+          painter: _CirclePainter(
+            progress: progress,
+            trackColor: context.surfaceColor,
+            progressColor: context.accentColor,
+          ),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   timeText,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w900,
                     fontSize: 65,
-                    color: AppColors.primaryColor,
+                    color: context.accentColor,
                   ),
                 ),
-                const Text(
+                Text(
                   'Remaining',
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
-                    color: AppColors.textSecondary,
+                    color: context.textSecondaryColor,
                   ),
                 ),
               ],
@@ -52,8 +56,14 @@ class TimerCircle extends StatelessWidget {
 
 class _CirclePainter extends CustomPainter {
   final double progress;
+  final Color trackColor;
+  final Color progressColor;
 
-  _CirclePainter({required this.progress});
+  _CirclePainter({
+    required this.progress,
+    required this.trackColor,
+    required this.progressColor,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -61,14 +71,14 @@ class _CirclePainter extends CustomPainter {
     final radius = size.width / 2 - 8;
 
     final bgPaint = Paint()
-      ..color = AppColors.primaryCard10Color
+      ..color = trackColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = 17;
 
     canvas.drawCircle(center, radius, bgPaint);
 
     final fgPaint = Paint()
-      ..color = AppColors.primaryColor
+      ..color = progressColor
       ..style = PaintingStyle.stroke
       ..strokeWidth = 17
       ..strokeCap = StrokeCap.round;
@@ -83,5 +93,8 @@ class _CirclePainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_CirclePainter old) => old.progress != progress;
+  bool shouldRepaint(_CirclePainter old) =>
+      old.progress != progress ||
+      old.trackColor != trackColor ||
+      old.progressColor != progressColor;
 }

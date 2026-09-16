@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../Core/Constants/app_color.dart';
 import '../../../../Core/Constants/assets.dart';
+import '../../../../Core/Routing/routes.dart';
+import '../../../../Core/Theme/app_palette.dart';
 import '../../../Add_Task/Data/Models/task_model.dart';
 import '../../../Add_Task/Data/Services/task_service.dart';
 
@@ -21,7 +22,7 @@ class HomeHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Expanded(
+        Expanded(
           child: Text.rich(
             TextSpan(
               children: [
@@ -31,7 +32,7 @@ class HomeHeader extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontSize: 27,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.textPrimary,
+                    color: context.textPrimaryColor,
                     height: 1.2,
                   ),
                 ),
@@ -41,7 +42,7 @@ class HomeHeader extends StatelessWidget {
                     fontFamily: 'Cairo',
                     fontSize: 27,
                     fontWeight: FontWeight.w800,
-                    color: AppColors.primaryColor,
+                    color: context.accentColor,
                   ),
                 ),
               ],
@@ -62,11 +63,14 @@ class HomeHeader extends StatelessWidget {
             }).length;
 
             return GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/notifications'),
+              onTap: () => Navigator.pushNamed(
+                context,
+                AppRoutes.notificationsScreen,
+              ),
               child: Stack(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(5),
                     child: Image.asset(
                       AppAssets.notificationBell,
                       width: 30,

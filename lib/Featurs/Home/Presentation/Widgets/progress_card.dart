@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import '../../../../Core/Constants/app_color.dart';
+import '../../../../Core/Theme/app_palette.dart';
+import '../../../../Core/Routing/routes.dart';
 
 class ProgressCard extends StatelessWidget {
   final double progress;
@@ -21,7 +23,7 @@ class ProgressCard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
       decoration: BoxDecoration(
-        color: AppColors.primaryColor,
+        color: context.primaryColor,
         borderRadius: BorderRadius.circular(42),
         boxShadow: [
           BoxShadow(
@@ -38,8 +40,8 @@ class ProgressCard extends StatelessWidget {
             message,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 23,
-              fontWeight: FontWeight.normal,
+              fontSize: 25,
+              fontWeight: FontWeight.w600,
               fontFamily: 'Cairo',
               height: 1.3,
             ),
@@ -54,7 +56,7 @@ class ProgressCard extends StatelessWidget {
                 width: 130,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/schedule');
+                    Navigator.pushNamed(context, AppRoutes.scheduleScreen);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primaryCardColor,
@@ -66,7 +68,7 @@ class ProgressCard extends StatelessWidget {
                     "View Task",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 17,
+                      fontSize: 14,
                       fontFamily: 'Cairo',
                     ),
                   ),
@@ -76,10 +78,10 @@ class ProgressCard extends StatelessWidget {
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     final barWidth =
-                        math.min(100.0, constraints.maxWidth);
+                        math.min(120.0, constraints.maxWidth);
 final filledWidth = math.min(
   barWidth,
-  math.max(0.0, (screenWidth - 228) * progress),
+  math.max(0.0, (screenWidth - 250) * progress),
 );
                     return Stack(
                       children: [

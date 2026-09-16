@@ -5,10 +5,12 @@ import 'package:provider/provider.dart';
 import 'package:studia/Core/Constants/app_color.dart';
 import 'package:studia/Core/Constants/app_strings.dart';
 import 'package:studia/Core/Constants/assets.dart';
-import 'package:studia/Core/Routing/routes.dart';
+import 'package:studia/Core/Theme/app_palette.dart';
 import 'package:studia/Core/Theme/theme_provider.dart';
 import 'package:studia/Core/Widgets/app_scaffold.dart';
+import 'package:studia/Core/Widgets/profile_avatar.dart';
 import 'package:studia/Featurs/Auth/Presentation/Providers/auth_provider.dart';
+import 'package:studia/Featurs/Profile/Presentation/Providers/profile_photo_provider.dart';
 import 'package:studia/Featurs/Profile/Presentation/Screens/edit_profile_screen.dart';
 import 'package:studia/Featurs/Profile/Presentation/Screens/help_support_screen.dart';
 import 'package:studia/Featurs/Profile/Presentation/Screens/security_privacy_screen.dart';
@@ -28,12 +30,31 @@ class ProfileScreen extends StatelessWidget {
     }
   }
 
+  Future<void> _pickAndUploadPhoto(BuildContext context) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final photoProvider = context.read<ProfilePhotoProvider>();
+
+    final success = await photoProvider.updatePhoto();
+
+    if (!context.mounted) return;
+
+    messenger.showSnackBar(
+      SnackBar(
+        content: Text(
+          success
+              ? 'Profile photo updated.'
+              : (photoProvider.errorMessage ?? 'Could not update profile photo.'),
+        ),
+      ),
+    );
+  }
+
   void _showThemePicker(BuildContext context) {
     final themeProvider = context.read<ThemeProvider>();
 
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: AppColors.white,
+      backgroundColor: context.elevatedCardColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -45,13 +66,13 @@ class ProfileScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   AppStrings.profileAppTheme,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w800,
                     fontSize: 22,
-                    color: AppColors.primaryColor,
+                    color: context.accentColor,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -99,7 +120,7 @@ class ProfileScreen extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
         decoration: BoxDecoration(
-          color: AppColors.primaryCard10Color,
+          color: context.surfaceColor,
           borderRadius: BorderRadius.circular(14),
         ),
         child: Row(
@@ -107,17 +128,17 @@ class ProfileScreen extends StatelessWidget {
             Expanded(
               child: Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
             ),
             Icon(
               isSelected ? Icons.check_circle : Icons.circle_outlined,
-              color: AppColors.primaryColor,
+              color: context.accentColor,
               size: 22,
             ),
           ],
@@ -128,11 +149,12 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authUser = FirebaseAuth.instance.currentUser ??
-        context.watch<AuthProvider>().user;
+    final authProvider = context.watch<AuthProvider>();
+    final photoProvider = context.watch<ProfilePhotoProvider>();
+    final authUser = authProvider.user ?? FirebaseAuth.instance.currentUser;
     final displayName = (authUser?.displayName ?? '').isNotEmpty
         ? authUser!.displayName!
-        : AppStrings.profileUserName;
+        : authUser?.email?.split('@').first ?? '';
     final email = (authUser?.email ?? '').isNotEmpty
         ? authUser!.email!
         : AppStrings.profileUserEmail;
@@ -147,40 +169,31 @@ class ProfileScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Container(
-                width: 120,
-                height: 120,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColors.primaryColor,
-                ),
-                child: Center(
-                  child: Image.asset(
-                    AppAssets.profilePic,
-                    width: 120,
-                    height: 120,
-                  ),
-                ),
+              ProfileAvatar(
+                photoPath: photoProvider.path,
+                showEditBadge: true,
+                isUploading: photoProvider.isLoading,
+                onTap: () => _pickAndUploadPhoto(context),
               ),
               const SizedBox(height: 18),
 
               Text(
                 displayName,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 30,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 4),
 
               Text(
                 email,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 14,
-                  color: AppColors.textSecondary,
+                  color: context.textSecondaryColor,
                 ),
               ),
               const SizedBox(height: 37),
@@ -241,16 +254,9 @@ class ProfileScreen extends StatelessWidget {
                 child: ElevatedButton.icon(
                   onPressed: () async {
                     await context.read<AuthProvider>().logout();
-
-                    if (!context.mounted) return;
-
-                    Navigator.pushReplacementNamed(
-                      context,
-                      AppRoutes.loginScreen,
-                    );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryColor,
+                    backgroundColor: context.primaryColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),

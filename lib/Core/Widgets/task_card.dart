@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Constants/app_color.dart';
+import '../Theme/app_palette.dart';
 
 class TaskCard extends StatelessWidget {
   final String title;
@@ -38,10 +38,10 @@ class TaskCard extends StatelessWidget {
       constraints: BoxConstraints(minHeight: height ?? 160),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: backgroundColor ?? AppColors.primaryCard10Color,
+        color: backgroundColor ?? context.surfaceColor,
         borderRadius: BorderRadius.circular(24),
         border: backgroundColor == Colors.white
-            ? Border.all(color: AppColors.primaryColor, width: 2)
+            ? Border.all(color: context.accentColor, width: 2)
             : border,
       ),
       child: Column(
@@ -50,11 +50,11 @@ class TaskCard extends StatelessWidget {
           // Time Range
           Text(
             timeRange,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 13,
               fontWeight: FontWeight.w600,
-              color: AppColors.textSecondary,
+              color: context.textSecondaryColor,
             ),
           ),
           const SizedBox(height: 8),
@@ -66,11 +66,12 @@ class TaskCard extends StatelessWidget {
               fontFamily: 'Poppins',
               fontWeight: FontWeight.w700,
               fontSize: 23,
-              color:
-                  isCompleted ? AppColors.textSecondary : AppColors.primaryColor,
+              color: isCompleted
+                  ? context.textSecondaryColor
+                  : context.accentColor,
               decoration:
                   isCompleted ? TextDecoration.lineThrough : TextDecoration.none,
-              decorationColor: AppColors.primaryColor,
+              decorationColor: context.accentColor,
             ),
           ),
 
@@ -91,16 +92,16 @@ class TaskCard extends StatelessWidget {
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: isCompleted
-                            ? AppColors.primaryColor
-                            : AppColors.primaryCard10Color,
+                            ? context.accentColor
+                            : context.surfaceColor,
                         width: 2,
                       ),
                     ),
                     child: isCompleted
-                        ? const Icon(
+                        ? Icon(
                             Icons.check,
                             size: 18,
-                            color: AppColors.primaryColor,
+                            color: context.accentColor,
                           )
                         : null,
                   ),
@@ -111,11 +112,11 @@ class TaskCard extends StatelessWidget {
                      const SizedBox(width: 3),
                     Text(
                       teamLabel!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
-                        color: AppColors.primaryColor,
+                        color: context.accentColor,
                       ),
                     ),
                   ],
@@ -123,31 +124,6 @@ class TaskCard extends StatelessWidget {
               else
                 const SizedBox.shrink(),
 
-              if (showCompletionControl)
-                GestureDetector(
-                  onTap: onCompletionChanged,
-                  child: Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: isCompleted
-                            ? AppColors.primaryColor
-                            : AppColors.primaryCard10Color,
-                        width: 2,
-                      ),
-                    ),
-                    child: isCompleted
-                        ? const Icon(
-                            Icons.check,
-                            size: 18,
-                            color: AppColors.primaryColor,
-                          )
-                        : null,
-                  ),
-                ),
               const SizedBox(width: 12),
 
               // Focus Button
@@ -157,7 +133,7 @@ class TaskCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
+                      color: context.primaryColor,
                       borderRadius: BorderRadius.circular(13),
                     ),
                     child: const Text(

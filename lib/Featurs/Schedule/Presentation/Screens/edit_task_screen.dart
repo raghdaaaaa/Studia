@@ -7,6 +7,7 @@ import 'package:studia/Featurs/Add_Task/Presentation/Widgets/add_text_.dart';
 import '../../../../Core/Constants/app_color.dart';
 import '../../../../Core/Constants/app_strings.dart';
 import '../../../../Core/Constants/assets.dart';
+import '../../../../Core/Theme/app_palette.dart';
 import '../../../../Core/Widgets/app_scaffold.dart';
 import '../../../../Core/Widgets/primary_button.dart';
 import '../../../Add_Task/Presentation/Widgets/category_chip.dart';
@@ -92,8 +93,12 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(AppStrings.editTaskUpdatedSuccess),
+        SnackBar(
+          content: Text(
+            AppStrings.editTaskUpdatedSuccess,
+            style: TextStyle(color: context.accentColor),
+          ),
+          backgroundColor: AppColors.primaryCardColor,
         ),
       );
 
@@ -137,32 +142,32 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
             children: [
               GestureDetector(
                 onTap: () => Navigator.pop(context),
-                child: const Icon(
+                child: Icon(
                   Icons.arrow_back_ios,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                   size: 22,
                 ),
               ),
               const SizedBox(height: 16),
 
-              const Text(
+              Text(
                 AppStrings.editTaskTitle,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w800,
                   fontSize: 30,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 24),
 
-              const Text(
+              Text(
                 AppStrings.addTaskNameLabel,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 8),
@@ -174,13 +179,13 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
               const SizedBox(height: 35),
 
-              const Text(
+              Text(
                 AppStrings.addTaskCategoryLabel,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 8),
@@ -224,13 +229,13 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
 
               const SizedBox(height: 30),
 
-              const Text(
+              Text(
                 AppStrings.addTaskDescriptionLabel,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 8),

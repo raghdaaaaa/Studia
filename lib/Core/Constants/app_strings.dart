@@ -6,10 +6,10 @@ class AppStrings {
   static const String passwordLabel = "Password";
   static const String passwordHint = "••••••••••";
   static const String forgetPassword = "Forget Password?";
-  static const String reminderMe = "Reminder me next time";
   static const String signInBtn = "Sign In";
   static const String dontHaveAccount = "Don't have account? ";
   static const String signUpLink = "Sign Up";
+  static const String reminderMe = "Reminder Me";
 
   // Sign Up Screen
   static const String signUpTitle = "Sign UP";
@@ -44,46 +44,23 @@ class AppStrings {
       "Boost your productivity using our integrated Focus Timer";
 
   // Onboarding Screen 3
-  static const String onboardingTitle3 = "Earn, Finish & Get Rewarded";
+  static const String onboardingTitle3 = "Finish on Time, Build Momentum";
   static const String onboardingDesc3 =
-      "Complete your tasks on time to earn points and level up your reward system";
+      "Complete your tasks consistently and watch your focus grow every day";
 
   // Common Buttons
   static const String skip = "Skip";
   static const String next = "Next";
   static const String start = "Start";
 
-  static const String homeGreeting = "Let's become\nmore Productive";
-  static const String homeProgressTitle =
-      "You've completed\n70% of today's goals";
   static const String homeProgressNoTasksTitle = "No tasks yet\nfor today";
+  static const String homeLoadError = "Could not load today's tasks.";
   static const String homeProgressUnitPrefix = "You've completed\n";
   static const String homeProgressUnitSuffix = "% of today's goals";
-  static const String viewTaskBtn = "View Task";
-
-  // Card 1
-  static const String task1Title = "Sketching in\nMy Journal";
-  static const String task1Time = "08:00 - 10:00";
-
-  // Card 2
-  static const String task2Title = "Coffee with\nthe Dev Team";
-  static const String task2Time = "07:00 - 08:00";
-
-  // Card 3
-  static const String task3Title = "Plan\nTomorrow's\nWins";
-  static const String task3Time = "11:00 - 12:00";
-
-  // Card 4 (View More)
-  static const String viewMore = "Click to view\nmore";
-  static const String scheduleCount = "+5 Schedule";
 
   // Schedule
   static const String scheduleTitle = "Schedule";
   static const String scheduleTodayTasks = "Today's Tasks";
-  static const String scheduleFlutterApi = "Flutter API Integration";
-  static const String scheduleSketchingUi = "Sketching UI Wireframes";
-  static const String scheduleReviewProject = "Review Project Document";
-  static const String scheduleFocusMore = "Focus more";
 
   // Add Task
   static const String addTaskTitle = "Add Task";
@@ -108,10 +85,8 @@ class AppStrings {
 
   // Productivity
   static const String productivityTitle = "Productivity";
-  static const String productivityCompletedTasks = "24";
   static const String productivityTasksLabel = "Tasks Done";
-  static const String productivityHoursFocus = "05";
-  static const String productivityHoursLabel = "Hours Focus";
+  static const String productivityHoursFocusedLabel = "Hours Focused";
   static const String productivityTotalTasksLabel = "Total Tasks";
   static const String productivityWeeklyOverview = "Weekly Overview";
   static const String productivityRecentAchievement = "Recent Achievement";

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../Core/Constants/app_color.dart';
+import '../../../../Core/Theme/app_palette.dart';
 import '../../../../Core/Constants/app_strings.dart';
 import '../../../../Core/Widgets/app_scaffold.dart';
 import 'package:studia/Featurs/Add_Task/Data/Services/task_service.dart';
@@ -22,11 +22,11 @@ class NotificationsScreen extends StatelessWidget {
             children: [
               Text(
                 AppStrings.notificationsTitle,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w800,
                   fontSize: 30,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 30),
@@ -45,15 +45,15 @@ class NotificationsScreen extends StatelessWidget {
                   }).toList();
 
                   if (pendingToday.isEmpty) {
-                    return const Padding(
-                      padding: EdgeInsets.only(top: 80),
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 80),
                       child: Center(
                         child: Text(
                           AppStrings.notificationsEmpty,
                           style: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16,
-                            color: AppColors.textSecondary,
+                            color: context.textSecondaryColor,
                           ),
                         ),
                       ),
@@ -63,7 +63,7 @@ class NotificationsScreen extends StatelessWidget {
                   return Column(
                     children: [
                       for (final task in pendingToday)
-                        _buildNotificationTile(task),
+                        _buildNotificationTile(context, task),
                     ],
                   );
                 },
@@ -75,13 +75,13 @@ class NotificationsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNotificationTile(TaskModel task) {
+  Widget _buildNotificationTile(BuildContext context, TaskModel task) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 14),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
       decoration: BoxDecoration(
-        color: AppColors.primaryCard10Color,
+        color: context.surfaceColor,
         borderRadius: BorderRadius.circular(24),
       ),
       child: Row(
@@ -89,8 +89,8 @@ class NotificationsScreen extends StatelessWidget {
           Container(
             width: 12,
             height: 12,
-            decoration: const BoxDecoration(
-              color: AppColors.primaryColor,
+            decoration: BoxDecoration(
+              color: context.accentColor,
               shape: BoxShape.circle,
             ),
           ),
@@ -103,20 +103,20 @@ class NotificationsScreen extends StatelessWidget {
                   task.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
+style: TextStyle(
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     fontSize: 16,
-                    color: AppColors.textPrimary,
+                    color: context.accentColor,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '${_formatDate(task.date)}  •  ${task.time}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 13,
-                    color: AppColors.textSecondary,
+                    color: context.textSecondaryColor,
                   ),
                 ),
               ],
@@ -145,3 +145,4 @@ class NotificationsScreen extends StatelessWidget {
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
 }
+

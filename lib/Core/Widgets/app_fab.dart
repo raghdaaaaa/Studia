@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../Core/Constants/app_color.dart';
 import '../../Core/Routing/routes.dart';
+import '../../Core/Theme/app_palette.dart';
+import '../Constants/app_color.dart';
 
 class AppFab extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -17,7 +18,7 @@ class AppFab extends StatelessWidget {
         height: 60,
         width: 60,
         decoration: BoxDecoration(
-          color: AppColors.primaryCard10Color,
+          color: AppColors.primaryCardColor,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
@@ -27,9 +28,9 @@ class AppFab extends StatelessWidget {
             ),
           ],
         ),
-        child: const Icon(
+        child: Icon(
           Icons.add,
-          color: Color(0xFF3C2117),
+          color: AppColors.primaryColor,
           size: 28,
         ),
       ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Constants/app_color.dart';
+import '../Theme/app_palette.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String label;
@@ -25,7 +25,7 @@ class PrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: context.primaryColor,
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius ?? 25),

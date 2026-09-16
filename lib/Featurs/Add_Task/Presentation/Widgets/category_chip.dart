@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../Core/Constants/app_color.dart';
 import '../../../../Core/Constants/app_strings.dart';
+import '../../../../Core/Theme/app_palette.dart';
 
 class CategoryChipRow extends StatefulWidget {
   const CategoryChipRow({super.key, this.onChanged, this.initialCategory});
@@ -53,13 +54,15 @@ class _CategoryChipRowState extends State<CategoryChipRow> {
                 duration: const Duration(milliseconds: 200),
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 13),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppColors.primaryColor : AppColors.white,
+                  color: isSelected
+                      ? context.primaryColor
+                      : context.elevatedCardColor,
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
                     width: 2,
                     color: isSelected
-                        ? AppColors.primaryColor
-                        : AppColors.textSecondary,
+                        ? context.primaryColor
+                        : context.textSecondaryColor,
                   ),
                 ),
                 child: Text(
@@ -68,7 +71,9 @@ class _CategoryChipRowState extends State<CategoryChipRow> {
                     fontFamily: 'Poppins',
                     fontWeight: FontWeight.w700,
                     fontSize: 16,
-                    color: isSelected ? AppColors.white : AppColors.textSecondary,
+                    color: isSelected
+                        ? AppColors.white
+                        : context.textSecondaryColor,
                   ),
                 ),
               ),

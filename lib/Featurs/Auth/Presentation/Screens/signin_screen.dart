@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:studia/Core/Constants/app_color.dart';
 import 'package:studia/Core/Constants/app_strings.dart';
 import 'package:studia/Core/Constants/assets.dart';
 import 'package:studia/Core/Routing/routes.dart';
+import 'package:studia/Core/Theme/app_palette.dart';
 import 'package:studia/Featurs/Auth/Presentation/Providers/auth_provider.dart';
 import 'package:studia/Featurs/Auth/Presentation/Widgets/auth_text_field.dart';
 
@@ -19,7 +19,6 @@ class _SigninScreenState extends State<SigninScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  bool _rememberMe = false;
   bool _obscurePassword = true;
 
   @override
@@ -70,7 +69,7 @@ class _SigninScreenState extends State<SigninScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.pageBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
@@ -92,23 +91,23 @@ class _SigninScreenState extends State<SigninScreen> {
 
               const SizedBox(height: 30),
 
-              const Text(
+              Text(
                 AppStrings.signInTitle,
                 style: TextStyle(
                   fontSize: 23.5,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: context.textPrimaryColor,
                   fontFamily: 'Poppins',
                 ),
               ),
 
               const SizedBox(height: 11),
 
-              const Text(
+              Text(
                 AppStrings.signInSubTitle,
                 style: TextStyle(
                   fontSize: 17,
-                  color: AppColors.textSecondary,
+                  color: context.textSecondaryColor,
                   fontFamily: 'Poppins',
                 ),
               ),
@@ -134,7 +133,7 @@ class _SigninScreenState extends State<SigninScreen> {
                     AppAssets.hide,
                     width: 32,
                     height: 32,
-                    color: AppColors.textSecondary,
+                    color: context.textSecondaryColor,
                   ),
                   onPressed: () {
                     setState(() {
@@ -153,44 +152,15 @@ class _SigninScreenState extends State<SigninScreen> {
                       AppRoutes.forgotpasswordScreen,
                     );
                   },
-                  child: const Text(
+                  child: Text(
                     AppStrings.forgetPassword,
                     style: TextStyle(
-                      color: AppColors.textSecondary,
+                      color: context.textSecondaryColor,
                       fontFamily: 'Poppins',
                       fontSize: 16,
                     ),
                   ),
                 ),
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    AppStrings.reminderMe,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.textSecondary,
-                      fontFamily: 'Poppins',
-                    ),
-                  ),
-                  Transform.scale(
-                    scale: 0.8,
-                    child: Switch(
-                      value: _rememberMe,
-                      onChanged: (val) {
-                        setState(() {
-                          _rememberMe = val;
-                        });
-                      },
-                      activeThumbColor: Colors.white,
-                      activeTrackColor: AppColors.primaryColor,
-                      inactiveThumbColor: Colors.white,
-                      inactiveTrackColor: Colors.grey,
-                    ),
-                  ),
-                ],
               ),
 
               const SizedBox(height: 80),
@@ -204,7 +174,7 @@ class _SigninScreenState extends State<SigninScreen> {
                       onPressed:
                           authProvider.isLoading ? null : _signIn,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryColor,
+                        backgroundColor: context.primaryColor,
                         shape: const StadiumBorder(),
                         elevation: 0,
                       ),
@@ -242,10 +212,10 @@ class _SigninScreenState extends State<SigninScreen> {
                     );
                   },
                   child: RichText(
-                    text: const TextSpan(
+                    text: TextSpan(
                       text: AppStrings.dontHaveAccount,
                       style: TextStyle(
-                        color: AppColors.textSecondary,
+                        color: context.textSecondaryColor,
                         fontSize: 15,
                         fontFamily: 'Poppins',
                       ),
@@ -253,7 +223,7 @@ class _SigninScreenState extends State<SigninScreen> {
                         TextSpan(
                           text: AppStrings.signUpLink,
                           style: TextStyle(
-                            color: AppColors.textPrimary,
+                            color: context.textPrimaryColor,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

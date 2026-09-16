@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:studia/Core/Constants/app_color.dart';
 import 'package:studia/Core/Constants/app_strings.dart';
 import 'package:studia/Core/Constants/assets.dart';
+import 'package:studia/Core/Theme/app_palette.dart';
 import 'package:studia/Core/Widgets/app_scaffold.dart';
 import 'package:studia/Core/Widgets/primary_button.dart';
 import 'package:studia/Featurs/Auth/Presentation/Providers/auth_provider.dart';
@@ -94,6 +94,7 @@ class _SecurityPrivacyScreenState extends State<SecurityPrivacyScreen> {
   }
 
   Widget _passwordField(
+    BuildContext context,
     String hint, {
     required TextEditingController controller,
     required bool obscure,
@@ -109,7 +110,7 @@ class _SecurityPrivacyScreenState extends State<SecurityPrivacyScreen> {
           AppAssets.hide,
           width: 27,
           height: 27,
-          color: AppColors.textSecondary,
+          color: context.textSecondaryColor,
         ),
         onPressed: onToggleObscure,
       ),
@@ -130,60 +131,61 @@ class _SecurityPrivacyScreenState extends State<SecurityPrivacyScreen> {
             children: [
               GestureDetector(
                 onTap: () => Navigator.pop(context),
-                child: const Icon(
+child: Icon(
                   Icons.arrow_back_ios,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                   size: 22,
                 ),
               ),
               const SizedBox(height: 16),
 
-              const Text(
+Text(
                 AppStrings.profileSecurityPrivacy,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w800,
                   fontSize: 30,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 24),
 
-              const Text(
+Text(
                 AppStrings.signUpEmailLabel,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 14),
 
               Text(
                 _currentEmail,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: AppColors.textSecondary,
+                  color: context.textSecondaryColor,
                 ),
               ),
 
               const SizedBox(height: 35),
 
-              const Text(
+Text(
                 AppStrings.securityCurrentPassword,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 8),
 
               _passwordField(
+                context,
                 AppStrings.securityCurrentPassword,
                 controller: _currentPasswordController,
                 obscure: _obscureCurrentPassword,
@@ -196,18 +198,19 @@ class _SecurityPrivacyScreenState extends State<SecurityPrivacyScreen> {
 
               const SizedBox(height: 24),
 
-              const Text(
+Text(
                 AppStrings.securityNewPassword,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 8),
 
               _passwordField(
+                context,
                 AppStrings.securityNewPassword,
                 controller: _newPasswordController,
                 obscure: _obscureNewPassword,
@@ -220,18 +223,19 @@ class _SecurityPrivacyScreenState extends State<SecurityPrivacyScreen> {
 
               const SizedBox(height: 24),
 
-              const Text(
+Text(
                 AppStrings.securityConfirmPassword,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 8),
 
               _passwordField(
+                context,
                 AppStrings.securityConfirmPassword,
                 controller: _confirmPasswordController,
                 obscure: _obscureConfirmPassword,

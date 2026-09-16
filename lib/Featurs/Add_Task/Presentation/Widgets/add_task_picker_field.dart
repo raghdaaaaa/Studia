@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../Core/Constants/app_color.dart';
+import '../../../../Core/Theme/app_palette.dart';
 
 enum PickerType { date, time }
 
@@ -59,14 +60,22 @@ class _AddTaskPickerFieldState extends State<AddTaskPickerField> {
   }
 
   Widget _themedPicker(Widget child) {
+    final isDark = context.isDarkMode;
     return Theme(
       data: Theme.of(context).copyWith(
-        colorScheme: const ColorScheme.light(
-          primary: AppColors.primaryColor,
-          onPrimary: AppColors.white,
-          surface: AppColors.white,
-          onSurface: AppColors.primaryColor,
-        ),
+        colorScheme: isDark
+            ? const ColorScheme.dark(
+                primary: AppColors.primaryCardColor,
+                onPrimary: AppColors.primaryColor,
+                surface: AppColors.darkSurface,
+                onSurface: AppColors.darkTextPrimary,
+              )
+            : const ColorScheme.light(
+                primary: AppColors.primaryColor,
+                onPrimary: AppColors.white,
+                surface: AppColors.white,
+                onSurface: AppColors.primaryColor,
+              ),
       ),
       child: child,
     );
@@ -91,11 +100,11 @@ class _AddTaskPickerFieldState extends State<AddTaskPickerField> {
       children: [
         Text(
           widget.label,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w600,
             fontSize: 17,
-            color: AppColors.primaryColor,
+            color: context.accentColor,
           ),
         ),
         const SizedBox(height: 8),
@@ -104,7 +113,7 @@ class _AddTaskPickerFieldState extends State<AddTaskPickerField> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
             decoration: BoxDecoration(
-              color: AppColors.primaryCard10Color,
+              color: context.surfaceColor,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Row(
@@ -113,10 +122,10 @@ class _AddTaskPickerFieldState extends State<AddTaskPickerField> {
                 Flexible(
                   child: Text(
                     _displayValue,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 15,
-                      color: AppColors.primaryColor,
+                      color: context.accentColor,
                     ),
                   ),
                 ),

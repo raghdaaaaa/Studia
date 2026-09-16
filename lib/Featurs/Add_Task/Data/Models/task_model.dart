@@ -34,4 +34,20 @@ class TaskModel {
       isCompleted: data['isCompleted'] ?? false,
     );
   }
+
+  /// Minutes since midnight for ordering; supports "10:30 AM" and "14:30".
+  int get timeMinutes {
+    final match =
+        RegExp(r'^(\d{1,2}):(\d{2})\s*(AM|PM)?$').firstMatch(time.trim());
+    if (match == null) return 0;
+
+    var hour = int.parse(match.group(1)!);
+    final minute = int.parse(match.group(2)!);
+    final period = match.group(3);
+
+    if (period == 'AM' && hour == 12) hour = 0;
+    if (period == 'PM' && hour != 12) hour += 12;
+
+    return hour * 60 + minute;
+  }
 }

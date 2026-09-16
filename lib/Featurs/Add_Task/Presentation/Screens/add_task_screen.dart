@@ -3,9 +3,9 @@ import 'package:studia/Featurs/Add_Task/Data/Services/task_service.dart';
 import 'package:studia/Featurs/Add_Task/Presentation/Widgets/add_task_picker_field.dart';
 import 'package:studia/Featurs/Add_Task/Presentation/Widgets/add_text_.dart';
 
-import '../../../../Core/Constants/app_color.dart';
 import '../../../../Core/Constants/app_strings.dart';
 import '../../../../Core/Constants/assets.dart';
+import '../../../../Core/Theme/app_palette.dart';
 import '../../../../Core/Widgets/app_scaffold.dart';
 import '../../../../Core/Widgets/primary_button.dart';
 import '../widgets/category_chip.dart';
@@ -45,6 +45,23 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please enter task name.'),
+        ),
+      );
+      return;
+    }
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final chosenDate = DateTime(
+      _selectedDate.year,
+      _selectedDate.month,
+      _selectedDate.day,
+    );
+
+    if (chosenDate.isBefore(today)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please pick today or a future date.'),
         ),
       );
       return;
@@ -113,32 +130,32 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
             children: [
               GestureDetector(
                 onTap: () => Navigator.pop(context),
-                child: const Icon(
+                child: Icon(
                   Icons.arrow_back_ios,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                   size: 22,
                 ),
               ),
               const SizedBox(height: 16),
 
-              const Text(
+              Text(
                 AppStrings.addTaskTitle,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w800,
                   fontSize: 30,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 24),
 
-              const Text(
+              Text(
                 AppStrings.addTaskNameLabel,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 8),
@@ -150,13 +167,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
               const SizedBox(height: 35),
 
-              const Text(
+              Text(
                 AppStrings.addTaskCategoryLabel,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 8),
@@ -197,13 +214,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
               const SizedBox(height: 30),
 
-              const Text(
+              Text(
                 AppStrings.addTaskDescriptionLabel,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 8),

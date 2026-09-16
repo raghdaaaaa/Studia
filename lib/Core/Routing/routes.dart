@@ -3,7 +3,6 @@ class AppRoutes {
   static const String loginScreen = '/signin';
   static const String signupScreen = '/signup';
   static const String forgotpasswordScreen = '/forgotpassword';
-  static const String otpScreen = '/otp';
   static const String homeScreen = '/home';
   static const String notificationsScreen = '/notifications';
   static const String scheduleScreen = '/schedule';
@@ -15,4 +14,20 @@ class AppRoutes {
 
   // for me
   static const String debugScreen = '/debug';
+}
+
+class FocusModeRouteArgs {
+  const FocusModeRouteArgs({
+    required this.taskId,
+    required this.taskTitle,
+  });
+
+  final String taskId;
+  final String taskTitle;
+}
+
+class NotFoundRouteArgs {
+  const NotFoundRouteArgs(this.unknownRoute);
+
+  final String? unknownRoute;
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../Constants/app_color.dart';
+import '../Theme/app_palette.dart';
 
 class SectionHeader extends StatelessWidget {
   final String title;
@@ -20,11 +20,11 @@ class SectionHeader extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontFamily: 'Poppins',
             fontWeight: FontWeight.w800,
             fontSize: 25,
-            color: AppColors.primaryColor,
+            color: context.accentColor,
           ),
         ),
         if (actionLabel != null)
@@ -32,10 +32,10 @@ class SectionHeader extends StatelessWidget {
             onTap: onActionTap,
             child: Text(
               actionLabel!,
-              style: const TextStyle(
+              style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 13,
-                color: AppColors.textSecondary,
+                color: context.textSecondaryColor,
               ),
             ),
           ),

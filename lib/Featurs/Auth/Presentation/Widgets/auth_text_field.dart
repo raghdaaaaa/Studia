@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:studia/Core/Constants/app_color.dart';
+import 'package:studia/Core/Theme/app_palette.dart';
 
 class AuthTextField extends StatelessWidget {
   final String hint;
@@ -26,7 +26,7 @@ class AuthTextField extends StatelessWidget {
     return Container(
       height: 50,
       decoration: BoxDecoration(
-        color: AppColors.primaryCardColor,
+        color: context.fieldFillColor,
         borderRadius: BorderRadius.circular(35),
       ),
       child: TextFormField(
@@ -34,10 +34,10 @@ class AuthTextField extends StatelessWidget {
         obscureText: obscureText,
         keyboardType: keyboardType,
         validator: validator,
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Poppins',
           fontSize: 14,
-          color: AppColors.textPrimary,
+          color: context.textPrimaryColor,
         ),
         decoration: InputDecoration(
           prefixIcon: Padding(
@@ -48,8 +48,8 @@ class AuthTextField extends StatelessWidget {
           ),
           suffixIcon: suffixIcon,
           hintText: hint,
-          hintStyle: const TextStyle(
-            color: AppColors.textSecondary,
+          hintStyle: TextStyle(
+            color: context.textSecondaryColor,
             fontFamily: 'Poppins',
             fontSize: 16,
           ),

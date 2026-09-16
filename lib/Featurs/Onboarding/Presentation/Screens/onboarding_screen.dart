@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../../../Core/Constants/app_color.dart';
 import '../../../../Core/Constants/app_strings.dart';
 import '../../../../Core/Routing/routes.dart';
+import '../../../../Core/Theme/app_palette.dart';
 import '../Widgets/onboarding_body.dart';
 import '../../../../Core/Widgets/primary_button.dart';
 import '../../Data/Models/onboarding_model.dart';
@@ -42,7 +42,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: context.pageBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -84,12 +84,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         children: [
           GestureDetector(
             onTap: _navigateToLogin,
-            child: const Text(
+            child: Text(
               AppStrings.skip,
               style: TextStyle(
                 fontSize: 21,
                 fontWeight: FontWeight.w600,
-                color: AppColors.primaryColor,
+                color: context.accentColor,
                 fontFamily: 'Poppins',
               ),
             ),

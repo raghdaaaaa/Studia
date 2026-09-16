@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../Core/Constants/app_color.dart';
+import '../../../../Core/Theme/app_palette.dart';
 
 class AuthBackButton extends StatelessWidget {
   const AuthBackButton({super.key});
@@ -8,9 +8,9 @@ class AuthBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () => Navigator.pop(context),
-      icon: const Icon(
+      icon: Icon(
         Icons.arrow_back,
-        color: AppColors.textPrimary,
+        color: context.textPrimaryColor,
       ),
       padding: EdgeInsets.zero,
       constraints: const BoxConstraints(),

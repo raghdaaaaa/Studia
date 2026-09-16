@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../Core/Constants/app_color.dart';
 import '../../../../Core/Constants/app_strings.dart';
 import '../../../../Core/Constants/assets.dart';
+import '../../../../Core/Theme/app_palette.dart';
 import '../Providers/auth_provider.dart';
 import '../Widgets/auth_text_field.dart';
 import '../Widgets/auth_back_button.dart';
@@ -66,7 +66,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: context.pageBackgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
@@ -80,23 +80,23 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
               const SizedBox(height: 60),
 
-              const Text(
+              Text(
                 AppStrings.forgotPasswordTitle,
                 style: TextStyle(
                   fontSize: 23.5,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: context.textPrimaryColor,
                   fontFamily: 'Poppins',
                 ),
               ),
 
               const SizedBox(height: 6),
 
-              const Text(
+              Text(
                 AppStrings.forgotPasswordSubTitle,
                 style: TextStyle(
                   fontSize: 17,
-                  color: AppColors.textSecondary,
+                  color: context.textSecondaryColor,
                   fontFamily: 'Poppins',
                 ),
               ),

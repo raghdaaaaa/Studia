@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:studia/Core/Constants/app_color.dart';
 
 class AppTheme {
-  static const Color _darkSurface = Color(0xFF241713);
-  static const Color _darkOnSurface = Color(0xFFFBF4E8);
-  static const Color _darkTextSecondary = Color(0xFFC9BBA8);
-  static const Color _darkBorder = Color(0xFF3A2A1F);
-
   static ThemeData get lightTheme => ThemeData(
     useMaterial3: true,
     scaffoldBackgroundColor: AppColors.backgroundColor,
@@ -27,6 +22,25 @@ class AppTheme {
       surfaceTintColor: Colors.transparent,
       centerTitle: true,
     ),
+
+    dialogTheme: const DialogThemeData(
+      backgroundColor: AppColors.white,
+      surfaceTintColor: Colors.transparent,
+    ),
+
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: AppColors.white,
+      surfaceTintColor: Colors.transparent,
+    ),
+
+    snackBarTheme: const SnackBarThemeData(
+      backgroundColor: AppColors.primaryCardColor,
+      contentTextStyle: TextStyle(
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.w500,
+        color: AppColors.primaryColor,
+      ),
+    ),
   );
 
   static ThemeData get darkTheme => ThemeData(
@@ -41,14 +55,14 @@ class AppTheme {
       onPrimary: AppColors.primaryColor,
       secondary: AppColors.secondaryGold,
       onSecondary: AppColors.white,
-      surface: _darkSurface,
-      onSurface: _darkOnSurface,
+      surface: AppColors.darkSurface,
+      onSurface: AppColors.darkTextPrimary,
       error: Color(0xFFCF6679),
       onError: AppColors.black,
     ),
 
     textTheme: const TextTheme().apply(
-      bodyColor: _darkOnSurface,
+      bodyColor: AppColors.darkTextPrimary,
       displayColor: AppColors.primaryCardColor,
     ),
 
@@ -69,13 +83,13 @@ class AppTheme {
 
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: _darkSurface,
-      hintStyle: const TextStyle(color: _darkTextSecondary),
-      labelStyle: const TextStyle(color: _darkOnSurface),
-      helperStyle: const TextStyle(color: _darkTextSecondary),
+      fillColor: AppColors.darkInputFill,
+      hintStyle: const TextStyle(color: AppColors.darkTextSecondary),
+      labelStyle: const TextStyle(color: AppColors.darkTextPrimary),
+      helperStyle: const TextStyle(color: AppColors.darkTextSecondary),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: _darkBorder),
+        borderSide: const BorderSide(color: AppColors.darkBorder),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
@@ -83,15 +97,25 @@ class AppTheme {
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
-        borderSide: const BorderSide(color: _darkBorder),
+        borderSide: const BorderSide(color: AppColors.darkBorder),
       ),
     ),
 
-    dividerTheme: const DividerThemeData(color: _darkBorder),
+    dividerTheme: const DividerThemeData(color: AppColors.darkBorder),
+
+    dialogTheme: const DialogThemeData(
+      backgroundColor: AppColors.darkCard,
+      surfaceTintColor: Colors.transparent,
+    ),
+
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: AppColors.darkCard,
+      surfaceTintColor: Colors.transparent,
+    ),
 
     snackBarTheme: const SnackBarThemeData(
-      backgroundColor: _darkSurface,
-      contentTextStyle: TextStyle(color: _darkOnSurface),
+      backgroundColor: AppColors.darkCard,
+      contentTextStyle: TextStyle(color: AppColors.darkTextPrimary),
     ),
   );
 }

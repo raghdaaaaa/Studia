@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../Core/Constants/app_color.dart';
+import '../../../../Core/Theme/app_palette.dart';
 
 class ProfileMenuItem extends StatelessWidget {
   final String icon;
@@ -22,7 +22,7 @@ class ProfileMenuItem extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: context.elevatedCardColor,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -39,14 +39,14 @@ class ProfileMenuItem extends StatelessWidget {
               width: 50,
               height: 50,
               decoration: BoxDecoration(
-                color: AppColors.primaryColor,
-                borderRadius: BorderRadius.circular(10),
+                color: context.primaryColor,
+                borderRadius: BorderRadius.circular(16),
               ),
               child: Center(
                 child: Image.asset(
                   icon,
-                  width: 50,
-                  height: 50,
+                  width: 55,
+                  height: 55,
                  ),
               ),
             ),
@@ -56,11 +56,11 @@ class ProfileMenuItem extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w600,
                   fontSize: 17,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
             ),
@@ -69,17 +69,17 @@ class ProfileMenuItem extends StatelessWidget {
             if (trailingLabel != null)
               Text(
                 trailingLabel!,
-                style: const TextStyle(
+                style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               )
             else
-              const Icon(
+              Icon(
                 Icons.chevron_right,
-                color: AppColors.textSecondary,
+                color: context.textSecondaryColor,
                 size: 20,
               ),
           ],

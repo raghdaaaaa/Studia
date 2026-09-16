@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../Core/Constants/app_color.dart';
+import '../../../../Core/Theme/app_palette.dart';
 
 class DaySelector extends StatefulWidget {
   final DateTime selectedDate;
@@ -59,9 +60,14 @@ class _DaySelectorState extends State<DaySelector> {
                 duration: const Duration(milliseconds: 200),
                 padding: const EdgeInsets.symmetric(vertical: 21),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppColors.primaryColor : AppColors.white,
+                  color: isSelected
+                      ? context.primaryColor
+                      : AppColors.white,
                   borderRadius: BorderRadius.circular(15),
-                  border: Border.all(width: 1.5, color: AppColors.primaryColor),
+                  border: Border.all(
+                    width: 1.5,
+                    color: isSelected ? context.primaryColor : context.accentColor,
+                  ),
                 ),
                 child: Column(
                   children: [
@@ -85,8 +91,8 @@ class _DaySelectorState extends State<DaySelector> {
                         fontSize: 21,
                         color: isSelected
                             ? AppColors.white
-                            : AppColors.primaryColor,
-                      ),
+: context.accentColor,
+                       ),
                     ),
                   ],
                 ),

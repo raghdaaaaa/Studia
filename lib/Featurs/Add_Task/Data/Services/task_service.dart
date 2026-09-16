@@ -74,8 +74,14 @@ class TaskService {
         .where('userId', isEqualTo: user.uid)
         .snapshots()
         .map(
-          (snapshot) =>
-              snapshot.docs.map((doc) => TaskModel.fromFirestore(doc)).toList(),
+          (snapshot) => snapshot.docs
+              .map((doc) => TaskModel.fromFirestore(doc))
+              .toList()
+            ..sort((a, b) {
+              final dateCompare = a.date.compareTo(b.date);
+              if (dateCompare != 0) return dateCompare;
+              return a.timeMinutes.compareTo(b.timeMinutes);
+            }),
         );
   }
 }

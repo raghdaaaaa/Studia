@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-import 'package:studia/Core/Constants/app_color.dart';
 import 'package:studia/Core/Constants/app_strings.dart';
+import 'package:studia/Core/Theme/app_palette.dart';
 import 'package:studia/Core/Widgets/app_scaffold.dart';
 
 class HelpSupportScreen extends StatelessWidget {
   const HelpSupportScreen({super.key});
 
-  Widget _faqItem(String question, String answer) {
+  Widget _faqItem(BuildContext context, String question, String answer) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       child: Material(
-        color: AppColors.primaryCard10Color,
+        color: context.surfaceColor,
         borderRadius: BorderRadius.circular(14),
         clipBehavior: Clip.antiAlias,
         child: Theme(
@@ -23,15 +23,15 @@ class HelpSupportScreen extends StatelessWidget {
             tilePadding: const EdgeInsets.symmetric(horizontal: 16),
             childrenPadding:
                 const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-            iconColor: AppColors.primaryColor,
-            collapsedIconColor: AppColors.primaryColor,
+            iconColor: context.accentColor,
+            collapsedIconColor: context.accentColor,
             title: Text(
               question,
-              style: const TextStyle(
+style: TextStyle(
                 fontFamily: 'Poppins',
                 fontWeight: FontWeight.w600,
                 fontSize: 16,
-                color: AppColors.primaryColor,
+                color: context.accentColor,
               ),
             ),
             children: [
@@ -39,11 +39,11 @@ class HelpSupportScreen extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   answer,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
-                    color: AppColors.textSecondary,
+                    color: context.textSecondaryColor,
                   ),
                 ),
               ),
@@ -68,66 +68,71 @@ class HelpSupportScreen extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: () => Navigator.pop(context),
-                child: const Icon(
+child: Icon(
                   Icons.arrow_back_ios,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                   size: 22,
                 ),
               ),
               const SizedBox(height: 16),
 
-              const Text(
+              Text(
                 AppStrings.profileHelpSupport,
-                style: TextStyle(
+style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w800,
                   fontSize: 30,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
-              ),
+                ),
               const SizedBox(height: 24),
 
-              const Text(
+Text(
                 AppStrings.helpSupportFaqTitle,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 14),
 
               _faqItem(
+                context,
                 AppStrings.helpSupportFaqAddTask,
                 AppStrings.helpSupportFaqAddTaskAnswer,
               ),
               _faqItem(
+                context,
                 AppStrings.helpSupportFaqMarkCompleted,
                 AppStrings.helpSupportFaqMarkCompletedAnswer,
               ),
               _faqItem(
+                context,
                 AppStrings.helpSupportFaqProductivity,
                 AppStrings.helpSupportFaqProductivityAnswer,
               ),
               _faqItem(
+                context,
                 AppStrings.helpSupportFaqEditProfile,
                 AppStrings.helpSupportFaqEditProfileAnswer,
               ),
               _faqItem(
+                context,
                 AppStrings.helpSupportFaqChangePassword,
                 AppStrings.helpSupportFaqChangePasswordAnswer,
               ),
 
               const SizedBox(height: 30),
 
-              const Text(
+Text(
                 AppStrings.helpSupportContactTitle,
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
-                  color: AppColors.primaryColor,
+                  color: context.accentColor,
                 ),
               ),
               const SizedBox(height: 14),
@@ -139,16 +144,16 @@ class HelpSupportScreen extends StatelessWidget {
                   vertical: 18,
                 ),
                 decoration: BoxDecoration(
-                  color: AppColors.primaryCard10Color,
+                  color: context.surfaceColor,
                   borderRadius: BorderRadius.circular(14),
                 ),
-                child: const Text(
+                child: Text(
                   AppStrings.helpSupportContactMessage,
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
-                    color: AppColors.textSecondary,
+                    color: context.textSecondaryColor,
                   ),
                 ),
               ),
